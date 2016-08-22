@@ -1,0 +1,27 @@
+{
+  "name": "crmisv",
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "authors": [
+    "xfxing"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "jquery.cookie": "jquery-cookie#~1.4.1",
+    "underscore": "~1.8.3",
+    "layer": "https://github.com/sentsin/layer.git#2.x"
+  },
+  "devDependencies": {
+    "CrmFetchKit": "git@github.com:xxf456123xxf/CrmFetchKit.git#^3.2.0"
+  }
+}
