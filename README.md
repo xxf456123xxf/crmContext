@@ -1,7 +1,7 @@
-加载crmContext;
-var crm ={};  
-var newCrmContext = new crmContext(window.Xrm);
-crm.attr = newCrmContext.attr.bind(newCrmContext);
-crm.entity = newCrmContext.entity; 
-var attr = crm.attr;
-var ent = crm.entity;
+加载crmContext;</br>
+var crm ={};  </br>
+var newCrmContext = new crmContext(window.Xrm);</br>
+crm.attr = newCrmContext.attr.bind(newCrmContext);</br>
+crm.entity = newCrmContext.entity; </br>
+var attr = crm.attr;</br>
+var ent = crm.entity;</br>
