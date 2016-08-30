@@ -10,7 +10,7 @@
             if (!this.contname) {
                 this.contname = Xrm.Page.ui.tabs.get(name);
             }
-            if (!this.attrname || !this.contname) {
+            if (!this.attrname && !this.contname) {
                 this.error('not found ' + this.name);
             }
         }
@@ -116,7 +116,7 @@
         }
         // 默认值
         default (val) {
-            if (this.crmEntity.type() == 1) {
+            if (this.crmEntity.type == 1) {
                 this.val(val);
             }
             return this;
@@ -149,7 +149,7 @@
         // 当前提示类型判断
         type(type) {
             return new Promise(function(resolve, reject) {
-                this.crmEntity.type() == type ? resolve(this) : reject(this);
+                this.crmEntity.type == type ? resolve(this) : reject(this);
             });
         }
         error(message) {
@@ -185,7 +185,7 @@
             return this.Xrm.Page.context.getUserName();
         }
         //判断是否是当前登录人 属性
-        get isowner() {
+        isowner() {
             return this.userid == new crmAttr(this.Xrm, 'ownerid').val();
         }
         //保存
@@ -198,7 +198,8 @@
         }
         //刷新实体
         refresh() {
-            this.Xrm.Utility.openEntityForm(this.Xrm.Page.data.entity.getEntityName(), this.Xrm.Page.data.entity.getId())
+            this.Xrm.Page.data.refresh()
+            //this.Xrm.Utility.openEntityForm(this.Xrm.Page.data.entity.getEntityName(), this.Xrm.Page.data.entity.getId())
         }
         //禁用或启用窗体所有字段
         disabledAll(state) {
@@ -215,6 +216,10 @@
         //隐藏
         hide(arr) {
             this.Tabs(arr, 'hide')
+        }
+        //是否没必填字段
+        isValid() {
+            return this.Xrm.Page.data.getIsValid();
         }
         //对tab下的字段控制
         Tabs(arr, handle, state) {
@@ -267,8 +272,9 @@
         //获取节对象Sections
         getSections(name) {
             const tabs = this.Xrm.Page.ui.tabs.get();
-            for (var tab of tabs) {
-                var section = tab.sections.getFirst((section) => {
+            for (let index in tabs) {
+                let tab = tabs[index];
+                const section = tab.sections.getFirst((section) => {
                     return section.getName() == name;
                 })
                 if (section) {
