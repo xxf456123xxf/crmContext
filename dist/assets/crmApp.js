@@ -58,10 +58,11 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var crmContext = exports.crmContext = function () {
-	    function crmContext(Xrm) {
+	    function crmContext(Xrm, pars) {
 	        _classCallCheck(this, crmContext);
 	
 	        this.Xrm = Xrm;
+	        this.pars = pars || {};
 	    }
 	
 	    _createClass(crmContext, [{
@@ -72,7 +73,7 @@
 	    }, {
 	        key: 'entity',
 	        get: function get() {
-	            return new _crmEntity.crmEntity(this.Xrm);
+	            return new _crmEntity.crmEntity(this.Xrm, this.pars.Sys);
 	        }
 	    }]);
 	
@@ -102,6 +103,7 @@
 	        if (!Xrm || !name) {
 	            return;
 	        }
+	        this.Xrm = Xrm;
 	        this.name = name;
 	        this.attrname = Xrm.Page.getAttribute(name);
 	        this.contname = Xrm.Page.getControl(name);
@@ -293,9 +295,8 @@
 	    }, {
 	        key: 'type',
 	        value: function type(_type) {
-	            return new Promise(function (resolve, reject) {
-	                this.crmEntity.type == _type ? resolve(this) : reject(this);
-	            });
+	            this.crmEntity.type != _type && (this.contname = this.attrname = null);
+	            return this;
 	        }
 	    }, {
 	        key: 'error',
@@ -309,6 +310,91 @@
 	        value: function save() {
 	            return this.crmEntity.save();
 	        }
+	    }, {
+	        key: 'option',
+	        value: function option(obj, handle, state) {
+	            var arr = [];
+	            var value = this.val();
+	            for (var key in obj) {
+	                var valArr = [].concat(obj[key]).map(function (item) {
+	                    return item * 1;
+	                });
+	                new crmEntity(this.Xrm).Tabs(key, handle, state);
+	                if (valArr.indexOf(value) > -1) {
+	                    arr.push(key);
+	                }
+	            }
+	            return arr;
+	        }
+	        //查找字段带值 ，表单字段列，查找字段列，查询的数据
+	
+	    }, {
+	        key: 'setByVal',
+	        value: function setByVal(columns, columns1, lookupById) {
+	            var _this = this;
+	
+	            var columnArr = [].concat(columns);
+	            var column1Arr = [].concat(columns1);
+	            if (this.attrname) {
+	                var value = this.getValue();
+	                if (!value) {
+	                    this.crmEntity.Controls(columnArr, 'clear');
+	                    return this;
+	                }
+	                lookupById(value, column1Arr).then(function (res, attrs) {
+	                    for (var i = 0; i < columnArr.length; i++) {
+	                        var attr = attrs.attributes[column1Arr[i]];
+	                        attr !== null && new crmAttr(_this.Xrm, columnArr[i]).setTypeVal(attr);
+	                    }
+	                });
+	            }
+	            return this;
+	        }
+	        //待完善，有问题
+	
+	    }, {
+	        key: 'setTypeVal',
+	        value: function setTypeVal(attr) {
+	            var value = attr.value;
+	            if (this.attrname) {
+	                switch (attr.type) {
+	                    case 'a:OptionSetValue':
+	                        this.val(value);
+	                        break;
+	                    case 'a:EntityReference':
+	                        var toValue = {};
+	                        toValue.id = attr.guid;
+	                        toValue.entityType = attr.logicalName;
+	                        toValue.name = attr.name;
+	                        this.val([toValue]);
+	                        break;
+	                    case 'a:EntityCollection':
+	                        this.val(value);
+	                        break;
+	                    case 'a:Money':
+	                        this.val(value);
+	                        break;
+	                    case 'a:AliasedValue':
+	                        this.val(value);
+	                        break;
+	                    case 'c:int':
+	                        this.val(value);
+	                        break;
+	                    case 'c:decimal':
+	                        this.val(value);
+	                        break;
+	                    case 'c:dateTime':
+	                        this.val(value);
+	                        break;
+	                    case 'c:boolean':
+	                        this.val(value);
+	                        break;
+	                    default:
+	                        this.val(value);
+	                }
+	            }
+	            return this;
+	        }
 	    }]);
 	
 	    return crmAttr;
@@ -317,10 +403,11 @@
 	exports.crmAttr = crmAttr;
 	
 	var crmEntity = exports.crmEntity = function () {
-	    function crmEntity(Xrm) {
+	    function crmEntity(Xrm, Sys) {
 	        _classCallCheck(this, crmEntity);
 	
 	        this.Xrm = Xrm;
+	        this.Sys = Sys;
 	    }
 	    //获取实体Id 属性
 	
@@ -351,8 +438,18 @@
 	    }, {
 	        key: 'refresh',
 	        value: function refresh() {
-	            this.Xrm.Page.data.refresh();
+	            this.Sys && this.Sys.Application._components.crmGrid && this.Sys.Application._components.crmGrid.refresh();
+	            this.Xrm.Page.data && this.Xrm.Page.data.refresh();
 	            //this.Xrm.Utility.openEntityForm(this.Xrm.Page.data.entity.getEntityName(), this.Xrm.Page.data.entity.getId())
+	        }
+	    }, {
+	        key: 'reload',
+	        value: function reload() {
+	            var _this2 = this;
+	
+	            setTimeout(function () {
+	                _this2.Xrm.Utility.openEntityForm(_this2.Xrm.Page.data.entity.getEntityName(), _this2.Xrm.Page.data.entity.getId());
+	            }, 1);
 	        }
 	        //禁用或启用窗体所有字段
 	
@@ -394,11 +491,12 @@
 	    }, {
 	        key: 'Tabs',
 	        value: function Tabs(arr, handle, state) {
-	            var _this = this;
+	            var _this3 = this;
 	
 	            var Xrm = this.Xrm;
+	            var arrCopy = [].concat(arr);
 	            var conArr = [].concat(arr);
-	            arr.forEach(function (item) {
+	            arrCopy.forEach(function (item) {
 	                var tab = Xrm.Page.ui.tabs.get(item);
 	                if (tab) {
 	                    var index = conArr.indexOf(item);
@@ -407,7 +505,7 @@
 	                        var disabled = new crmAttr()[handle].bind({ contname: tab });
 	                        disabled(state);
 	                    } else {
-	                        _this.Sections(tab.sections.get(), handle, state);
+	                        _this3.Sections(tab.sections.get(), handle, state);
 	                    }
 	                }
 	            });
@@ -418,18 +516,18 @@
 	    }, {
 	        key: 'Sections',
 	        value: function Sections(sections, handle, state) {
-	            var _this2 = this;
+	            var _this4 = this;
 	
 	            var conArr = [].concat(sections);
 	            sections.forEach(function (section) {
 	                var sec = section;
 	                if (typeof sec === 'string') {
-	                    sec = _this2.getSections(section) || sec;
+	                    sec = _this4.getSections(section) || sec;
 	                }
 	                if (typeof sec !== 'string') {
 	                    var index = conArr.indexOf(section);
 	                    index > -1 && conArr.splice(index, 1);
-	                    _this2.Controls(sec.controls.get(), handle, state);
+	                    _this4.Controls(sec.controls.get(), handle, state);
 	                }
 	            });
 	            this.Controls(conArr, handle, state);
@@ -437,11 +535,11 @@
 	    }, {
 	        key: 'Controls',
 	        value: function Controls(controls, handle, state) {
-	            var _this3 = this;
+	            var _this5 = this;
 	
 	            controls.forEach(function (control) {
 	                if (typeof control == 'string') {
-	                    new crmAttr(_this3.Xrm, control)[handle](state);
+	                    new crmAttr(_this5.Xrm, control)[handle](state);
 	                } else {
 	                    var controlType = control.getControlType();
 	                    if (controlType != 'iframe' && controlType != 'webresource' && controlType != 'subgrid') {
@@ -459,8 +557,8 @@
 	            var tabs = this.Xrm.Page.ui.tabs.get();
 	            for (var index in tabs) {
 	                var tab = tabs[index];
-	                var section = tab.sections.getFirst(function (section) {
-	                    return section.getName() == name;
+	                var section = tab.sections.getFirst(function (sec) {
+	                    return sec.getName() == name;
 	                });
 	                if (section) {
 	                    return section;
