@@ -57,6 +57,8 @@
 	
 	var _crmProcess = __webpack_require__(2);
 	
+	var _crmGridList2 = __webpack_require__(3);
+	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var crmContext = exports.crmContext = function () {
@@ -71,6 +73,11 @@
 	        key: 'attr',
 	        value: function attr(name) {
 	            return new _crmEntity.crmAttr(this.Xrm, name);
+	        }
+	    }, {
+	        key: 'crmGridList',
+	        value: function crmGridList(name) {
+	            return new _crmGridList2.crmGridList(this.pars.Sys, name);
 	        }
 	    }, {
 	        key: 'entity',
@@ -877,6 +884,72 @@
 	    }]);
 
 	    return crmProcess;
+	}();
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var crmGridList = exports.crmGridList = function () {
+	    function crmGridList(Sys, name) {
+	        _classCallCheck(this, crmGridList);
+	
+	        this.contname = Sys.Application._components[name];
+	        if (!this.contname) {
+	            this.logError('not crmGridList name : ' + this.contname);
+	        }
+	    }
+	
+	    _createClass(crmGridList, [{
+	        key: 'getSelectIds',
+	        value: function getSelectIds() {
+	            if (!this.contname) {
+	                return [];
+	            }
+	            return this.contname.get_selectedIds();
+	        }
+	    }, {
+	        key: 'logError',
+	        value: function logError(message) {
+	            window.console && typeof window.console.error === 'function' && window.console.error(message);
+	        }
+	    }, {
+	        key: 'list',
+	        get: function get() {
+	            if (!this.contname) {
+	                return [];
+	            }
+	            return this.contname.get_allRecords();
+	        }
+	    }, {
+	        key: 'listIds',
+	        get: function get() {
+	            if (!this.contname) {
+	                return [];
+	            }
+	            return this.contname.get_allRecordIds();
+	        }
+	    }, {
+	        key: 'count',
+	        get: function get() {
+	            if (!this.contname) {
+	                return 0;
+	            }
+	            return this.contname.get_allRecords().length;
+	        }
+	    }]);
+
+	    return crmGridList;
 	}();
 
 /***/ }
