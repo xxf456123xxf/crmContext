@@ -12,12 +12,16 @@ export class crmAttr {
             this.contname = Xrm.Page.ui.tabs.get(name);
         }
         if (!this.attrname && !this.contname) {
-            this.error('not found ' + this.name);
+            this.error('not found '
+                + this.name);
         }
     }
         //获取字段值 crm方法
     getValue() {
-        const getval = this.attrname.getValue();
+        let getval = null
+        if(this.attrname) {
+            getval = this.attrname.getValue();
+        }
         return getval;
     }
         //获取字段值 Lookup返回第一个值
@@ -25,7 +29,7 @@ export class crmAttr {
         if (!this.attrname) {
             return this;
         }
-        const getval = this.attrname.getValue();
+        const getval = this.attrname.getValue() || {};
         if (Array.isArray(getval)) {
             return getval.length > 0 ? getval[0] : {}
         }
@@ -67,33 +71,35 @@ export class crmAttr {
             if (arguments[0] != undefined) {
                 disabled = arguments[0];
             }
-            this.contname.setDisabled(disabled);
+            typeof this.contname.setDisabled === 'function' && this.contname.setDisabled(disabled);
         }
         return this;
     }
         //绑定或触发change
     change(c, a) {
-        if (this.attrname) {
+        if (this.contname) {
             if (typeof(c) == 'function') {
-                this.attrname.addOnChange(c, false);
-                a && this.attrname.fireOnChange();
+                this.contname.getAttribute().addOnChange(c, false);
+                a && setTimeout(() => {
+                    this.contname.getAttribute().fireOnChange();
+                }, 200)
             } else if (arguments.length === 0) {
-                this.attrname.fireOnChange();
+                this.contname.getAttribute().fireOnChange();
             }
         }
         return this;
     }
         //移除change方法
     removechange(a) {
-        if (this.attrname) {
-            this.attrname.removeOnChange(a);
+        if (this.contname) {
+            this.contname.getAttribute().removeOnChange(a);
         }
         return this;
     }
         //字段必填
     required(a) {
         if (this.attrname) {
-            this.attrname.setRequiredLevel(a ? 'required' : 'none');
+            this.attrname.setRequiredLevel(a != 0 ? 'required' : 'none');
         }
         return this;
     }
@@ -124,7 +130,7 @@ export class crmAttr {
     }
     //Lookup字段设置当前登录人
     user() {
-        if (this.attrname) {
+        if (this.contname) {
             let toValue = {};
             toValue.id = this.crmEntity.userid;
             toValue.entityType = 'systemuser';
@@ -133,9 +139,18 @@ export class crmAttr {
         }
         return this;
     }
-        //清除字段
+    setLookup(entityType, id, name) {
+        if (this.contname) {
+            let toValue = {};
+            toValue.id = id;
+            toValue.entityType = entityType;
+            toValue.name = name || '';
+            this.val([toValue]);
+        }
+        return this;
+    }
     clear() {
-        if (this.attrname) {
+        if (this.contname) {
             this.val(null);
         }
         return this;
@@ -153,7 +168,7 @@ export class crmAttr {
         return this;
     }
     error(message) {
-        window.console.error(message);
+        window.console && typeof window.console.error === 'function' && window.console.error(message);
     }
         //保存
     save() {
@@ -171,7 +186,7 @@ export class crmAttr {
                 arr.push(key);
             }
         }
-        return arr;
+        return new crmEntityHandle(this.Xrm, arr);
     }
         //查找字段带值 ，表单字段列，查找字段列，查询的数据
     setByVal(columns, columns1, lookupById) {
@@ -185,19 +200,60 @@ export class crmAttr {
             }
             lookupById(value, column1Arr).then((res, attrs) => {
                 for (var i = 0; i < columnArr.length; i++) {
+                    let attrName = columnArr[i];
+                    if(attrName.endsWith('_a')) {
+                        attrName = attrName.replace(/_a$/, '');
+                        if ((new crmAttr(this.Xrm, attrName)).val()) {
+                            continue;
+                        }
+                    }
                     let attr = attrs.attributes[column1Arr[i]];
                     attr !== null && (
-                            (new crmAttr(this.Xrm, columnArr[i])).setTypeVal(attr)
+                            (new crmAttr(this.Xrm, attrName)).setTypeVal(attr)
                         )
                 }
             })
         }
         return this
     }
-        //待完善，有问题
+    addCustomView(viewDisplayName, fetchXml, columns) {
+        if (this.contname && [1, 2].indexOf(this.crmEntity.type)> -1) {
+            const entityName = this.contname.get_dataContext().get_lookupTypeNames().split(':')[0];
+            const columnsStr = columns.map(item => { return `<cell name='${item}' width='300' />` }).join('');
+            const layoutXml = `<grid name='resultset' object='10' jump='${entityName}id' select='1' icon='1' preview='1'><row name='result' id='${entityName}id'>${columnsStr}</row></grid>`;
+            this.contname.addCustomView('{00000000-0000-0000-0000-000000000001}', entityName, viewDisplayName, fetchXml, layoutXml, 1);
+        }
+        return this;
+    }
+    addFilter(handle, entityType) {
+        if(typeof handle === 'function') {
+            this.addPreSearch(() => { let customFilter = handle(); this.addCustomFilter(customFilter, entityType) })
+        }
+        return this;
+    }
+    addPreSearch(handle) {
+        if (this.contname) {
+            this.contname.addPreSearch(handle);
+        }
+        return this;
+    }
+    addCustomFilter(fetchXmlFilter, entityType) {
+        if (this.contname) {
+            this.contname.addCustomFilter(fetchXmlFilter, entityType);
+        }
+        return this;
+    }
+    //待完善，有问题
     setTypeVal(attr) {
-        const value = attr.value;
+        let value = null;
+        if(attr) {
+            value = attr.value
+        }
         if (this.attrname) {
+            if(!attr) {
+                this.val(value);
+                return this;
+            }
             switch (attr.type) {
             case 'a:OptionSetValue':
                 this.val(value);
@@ -235,6 +291,30 @@ export class crmAttr {
             }
         }
         return this;
+    }
+    refresh() {
+        if(this.contname) {
+            typeof this.contname.refresh === 'function' && this.contname.refresh();
+        }
+        return this;
+    }
+    setMax(value) {
+        if(this.attrname) {
+            var attribute = this.attrname._attribute;
+            var setmax = attribute.set_max;
+            typeof setmax === 'function' &&
+           (setmax.apply(attribute, [value]))
+        }
+        return this
+    }
+    setMin(value) {
+        if(this.attrname) {
+            var attribute = this.attrname._attribute;
+            var setmin = attribute.set_min;
+            typeof setmin === 'function' &&
+           (setmin.apply(attribute, [value]))
+        }
+        return this
     }
 }
 export class crmEntity {
@@ -274,10 +354,12 @@ export class crmEntity {
     refRibbon() {
         return this.Xrm.Page.ui.refreshRibbon();
     }
-        //刷新实体
+    //刷新实体
     refresh() {
-        this.Sys && this.Sys.Application._components.crmGrid && this.Sys.Application._components.crmGrid.refresh();
-        this.Xrm.Page.data && this.Xrm.Page.data.refresh();
+        setTimeout(() => {
+            this.Sys && this.Sys.Application._components.crmGrid && this.Sys.Application._components.crmGrid.refresh();
+            this.Xrm.Page.data && this.Xrm.Page.data.refresh();
+        }, 50);
             //this.Xrm.Utility.openEntityForm(this.Xrm.Page.data.entity.getEntityName(), this.Xrm.Page.data.entity.getId())
     }
     reload() {
@@ -291,19 +373,23 @@ export class crmEntity {
     }
         //禁用或启用
     disabled(arr, state) {
-        this.Tabs(arr, 'disabled', state)
+        return this.Tabs(arr, 'disabled', state)
     }
         //显示
     show(arr) {
-        this.Tabs(arr, 'show')
+        return this.Tabs(arr, 'show')
     }
         //隐藏
     hide(arr) {
-        this.Tabs(arr, 'hide')
+        return this.Tabs(arr, 'hide')
     }
         //是否没必填字段
     isValid() {
         return this.Xrm.Page.data.getIsValid();
+    }
+    val(arr, state) {
+        const arrCopy = [].concat(arr);
+        return this.Controls(arrCopy, 'val', state);
     }
         //对tab下的字段控制
     Tabs(arr, handle, state) {
@@ -324,6 +410,7 @@ export class crmEntity {
             }
         })
         this.Sections(conArr, handle, state);
+        return new crmEntityHandle(this.Xrm, arr);
     }
         //对Sections下的字段控制
     Sections(sections, handle, state) {
@@ -336,23 +423,32 @@ export class crmEntity {
             if (typeof sec !== 'string') {
                 const index = conArr.indexOf(section);
                 index > -1 && conArr.splice(index, 1);
-                this.Controls(sec.controls.get(), handle, state);
+                if(sec.controls.get().length !=0) {
+                    this.Controls(sec.controls.get(), handle, state);
+                }
+                // else {
+                //     (new crmAttr()[handle]).apply({contname:sec}, [state])
+                // }
             }
         })
         this.Controls(conArr, handle, state);
     }
     Controls(controls, handle, state) {
+        var returnArr = [];
         controls.forEach((control) => {
             if (typeof control == 'string') {
                 (new crmAttr(this.Xrm, control))[handle](state);
             } else {
                 var controlType = control.getControlType();
                 if (controlType != 'iframe' && controlType != 'webresource' && controlType != 'subgrid') {
-                    const disabled = (new crmAttr())[handle].bind({ contname: control });
-                    disabled(state);
+                    returnArr.push((new crmAttr(this.Xrm, control.getName())[handle](state)));
+                }
+                else {
+                    (new crmAttr()[handle]).apply({contname:control}, [state])
                 }
             }
         });
+        return returnArr;
     }
         //获取节对象Sections
     getSections(name) {
@@ -367,5 +463,31 @@ export class crmEntity {
             }
         }
         return null;
+    }
+}
+//内部类
+export class crmEntityHandle {
+    constructor(Xrm, attrs) {
+        this.Xrm = Xrm;
+        this.attrs= attrs;
+    }
+        //禁用或启用
+    disabled(state) {
+        this.Tabs('disabled', state)
+        return this;
+    }
+        //显示
+    show() {
+        this.Tabs('show')
+        return this;
+    }
+        //隐藏
+    hide() {
+        this.Tabs('hide')
+        return this;
+    }
+        //对tab下的字段控制
+    Tabs(handle, state) {
+        return new crmEntity(this.Xrm).Tabs(this.attrs, handle, state)
     }
 }

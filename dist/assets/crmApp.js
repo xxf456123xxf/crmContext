@@ -55,6 +55,8 @@
 	
 	var _crmEntity = __webpack_require__(1);
 	
+	var _crmProcess = __webpack_require__(2);
+	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var crmContext = exports.crmContext = function () {
@@ -74,6 +76,11 @@
 	        key: 'entity',
 	        get: function get() {
 	            return new _crmEntity.crmEntity(this.Xrm, this.pars.Sys);
+	        }
+	    }, {
+	        key: 'process',
+	        get: function get() {
+	            return new _crmProcess.crmProcess(this.Xrm);
 	        }
 	    }]);
 	
@@ -121,7 +128,10 @@
 	    _createClass(crmAttr, [{
 	        key: 'getValue',
 	        value: function getValue() {
-	            var getval = this.attrname.getValue();
+	            var getval = null;
+	            if (this.attrname) {
+	                getval = this.attrname.getValue();
+	            }
 	            return getval;
 	        }
 	        //获取字段值 Lookup返回第一个值
@@ -132,7 +142,7 @@
 	            if (!this.attrname) {
 	                return this;
 	            }
-	            var getval = this.attrname.getValue();
+	            var getval = this.attrname.getValue() || {};
 	            if (Array.isArray(getval)) {
 	                return getval.length > 0 ? getval[0] : {};
 	            }
@@ -186,7 +196,7 @@
 	                if (arguments[0] != undefined) {
 	                    disabled = arguments[0];
 	                }
-	                this.contname.setDisabled(disabled);
+	                typeof this.contname.setDisabled === 'function' && this.contname.setDisabled(disabled);
 	            }
 	            return this;
 	        }
@@ -195,12 +205,16 @@
 	    }, {
 	        key: 'change',
 	        value: function change(c, a) {
-	            if (this.attrname) {
+	            var _this = this;
+	
+	            if (this.contname) {
 	                if (typeof c == 'function') {
-	                    this.attrname.addOnChange(c, false);
-	                    a && this.attrname.fireOnChange();
+	                    this.contname.getAttribute().addOnChange(c, false);
+	                    a && setTimeout(function () {
+	                        _this.contname.getAttribute().fireOnChange();
+	                    }, 200);
 	                } else if (arguments.length === 0) {
-	                    this.attrname.fireOnChange();
+	                    this.contname.getAttribute().fireOnChange();
 	                }
 	            }
 	            return this;
@@ -210,8 +224,8 @@
 	    }, {
 	        key: 'removechange',
 	        value: function removechange(a) {
-	            if (this.attrname) {
-	                this.attrname.removeOnChange(a);
+	            if (this.contname) {
+	                this.contname.getAttribute().removeOnChange(a);
 	            }
 	            return this;
 	        }
@@ -221,7 +235,7 @@
 	        key: 'required',
 	        value: function required(a) {
 	            if (this.attrname) {
-	                this.attrname.setRequiredLevel(a ? 'required' : 'none');
+	                this.attrname.setRequiredLevel(a != 0 ? 'required' : 'none');
 	            }
 	            return this;
 	        }
@@ -261,7 +275,7 @@
 	    }, {
 	        key: 'user',
 	        value: function user() {
-	            if (this.attrname) {
+	            if (this.contname) {
 	                var toValue = {};
 	                toValue.id = this.crmEntity.userid;
 	                toValue.entityType = 'systemuser';
@@ -270,12 +284,22 @@
 	            }
 	            return this;
 	        }
-	        //清除字段
-	
+	    }, {
+	        key: 'setLookup',
+	        value: function setLookup(entityType, id, name) {
+	            if (this.contname) {
+	                var toValue = {};
+	                toValue.id = id;
+	                toValue.entityType = entityType;
+	                toValue.name = name || '';
+	                this.val([toValue]);
+	            }
+	            return this;
+	        }
 	    }, {
 	        key: 'clear',
 	        value: function clear() {
-	            if (this.attrname) {
+	            if (this.contname) {
 	                this.val(null);
 	            }
 	            return this;
@@ -301,7 +325,7 @@
 	    }, {
 	        key: 'error',
 	        value: function error(message) {
-	            window.console.error(message);
+	            window.console && typeof window.console.error === 'function' && window.console.error(message);
 	        }
 	        //保存
 	
@@ -324,14 +348,14 @@
 	                    arr.push(key);
 	                }
 	            }
-	            return arr;
+	            return new crmEntityHandle(this.Xrm, arr);
 	        }
 	        //查找字段带值 ，表单字段列，查找字段列，查询的数据
 	
 	    }, {
 	        key: 'setByVal',
 	        value: function setByVal(columns, columns1, lookupById) {
-	            var _this = this;
+	            var _this2 = this;
 	
 	            var columnArr = [].concat(columns);
 	            var column1Arr = [].concat(columns1);
@@ -343,10 +367,58 @@
 	                }
 	                lookupById(value, column1Arr).then(function (res, attrs) {
 	                    for (var i = 0; i < columnArr.length; i++) {
+	                        var attrName = columnArr[i];
+	                        if (attrName.endsWith('_a')) {
+	                            attrName = attrName.replace(/_a$/, '');
+	                            if (new crmAttr(_this2.Xrm, attrName).val()) {
+	                                continue;
+	                            }
+	                        }
 	                        var attr = attrs.attributes[column1Arr[i]];
-	                        attr !== null && new crmAttr(_this.Xrm, columnArr[i]).setTypeVal(attr);
+	                        attr !== null && new crmAttr(_this2.Xrm, attrName).setTypeVal(attr);
 	                    }
 	                });
+	            }
+	            return this;
+	        }
+	    }, {
+	        key: 'addCustomView',
+	        value: function addCustomView(viewDisplayName, fetchXml, columns) {
+	            if (this.contname && [1, 2].indexOf(this.crmEntity.type) > -1) {
+	                var entityName = this.contname.get_dataContext().get_lookupTypeNames().split(':')[0];
+	                var columnsStr = columns.map(function (item) {
+	                    return '<cell name=\'' + item + '\' width=\'300\' />';
+	                }).join('');
+	                var layoutXml = '<grid name=\'resultset\' object=\'10\' jump=\'' + entityName + 'id\' select=\'1\' icon=\'1\' preview=\'1\'><row name=\'result\' id=\'' + entityName + 'id\'>' + columnsStr + '</row></grid>';
+	                this.contname.addCustomView('{00000000-0000-0000-0000-000000000001}', entityName, viewDisplayName, fetchXml, layoutXml, 1);
+	            }
+	            return this;
+	        }
+	    }, {
+	        key: 'addFilter',
+	        value: function addFilter(handle, entityType) {
+	            var _this3 = this;
+	
+	            if (typeof handle === 'function') {
+	                this.addPreSearch(function () {
+	                    var customFilter = handle();_this3.addCustomFilter(customFilter, entityType);
+	                });
+	            }
+	            return this;
+	        }
+	    }, {
+	        key: 'addPreSearch',
+	        value: function addPreSearch(handle) {
+	            if (this.contname) {
+	                this.contname.addPreSearch(handle);
+	            }
+	            return this;
+	        }
+	    }, {
+	        key: 'addCustomFilter',
+	        value: function addCustomFilter(fetchXmlFilter, entityType) {
+	            if (this.contname) {
+	                this.contname.addCustomFilter(fetchXmlFilter, entityType);
 	            }
 	            return this;
 	        }
@@ -355,8 +427,15 @@
 	    }, {
 	        key: 'setTypeVal',
 	        value: function setTypeVal(attr) {
-	            var value = attr.value;
+	            var value = null;
+	            if (attr) {
+	                value = attr.value;
+	            }
 	            if (this.attrname) {
+	                if (!attr) {
+	                    this.val(value);
+	                    return this;
+	                }
 	                switch (attr.type) {
 	                    case 'a:OptionSetValue':
 	                        this.val(value);
@@ -392,6 +471,34 @@
 	                    default:
 	                        this.val(value);
 	                }
+	            }
+	            return this;
+	        }
+	    }, {
+	        key: 'refresh',
+	        value: function refresh() {
+	            if (this.contname) {
+	                typeof this.contname.refresh === 'function' && this.contname.refresh();
+	            }
+	            return this;
+	        }
+	    }, {
+	        key: 'setMax',
+	        value: function setMax(value) {
+	            if (this.attrname) {
+	                var attribute = this.attrname._attribute;
+	                var setmax = attribute.set_max;
+	                typeof setmax === 'function' && setmax.apply(attribute, [value]);
+	            }
+	            return this;
+	        }
+	    }, {
+	        key: 'setMin',
+	        value: function setMin(value) {
+	            if (this.attrname) {
+	                var attribute = this.attrname._attribute;
+	                var setmin = attribute.set_min;
+	                typeof setmin === 'function' && setmin.apply(attribute, [value]);
 	            }
 	            return this;
 	        }
@@ -438,17 +545,21 @@
 	    }, {
 	        key: 'refresh',
 	        value: function refresh() {
-	            this.Sys && this.Sys.Application._components.crmGrid && this.Sys.Application._components.crmGrid.refresh();
-	            this.Xrm.Page.data && this.Xrm.Page.data.refresh();
+	            var _this4 = this;
+	
+	            setTimeout(function () {
+	                _this4.Sys && _this4.Sys.Application._components.crmGrid && _this4.Sys.Application._components.crmGrid.refresh();
+	                _this4.Xrm.Page.data && _this4.Xrm.Page.data.refresh();
+	            }, 50);
 	            //this.Xrm.Utility.openEntityForm(this.Xrm.Page.data.entity.getEntityName(), this.Xrm.Page.data.entity.getId())
 	        }
 	    }, {
 	        key: 'reload',
 	        value: function reload() {
-	            var _this2 = this;
+	            var _this5 = this;
 	
 	            setTimeout(function () {
-	                _this2.Xrm.Utility.openEntityForm(_this2.Xrm.Page.data.entity.getEntityName(), _this2.Xrm.Page.data.entity.getId());
+	                _this5.Xrm.Utility.openEntityForm(_this5.Xrm.Page.data.entity.getEntityName(), _this5.Xrm.Page.data.entity.getId());
 	            }, 1);
 	        }
 	        //禁用或启用窗体所有字段
@@ -463,21 +574,21 @@
 	    }, {
 	        key: 'disabled',
 	        value: function disabled(arr, state) {
-	            this.Tabs(arr, 'disabled', state);
+	            return this.Tabs(arr, 'disabled', state);
 	        }
 	        //显示
 	
 	    }, {
 	        key: 'show',
 	        value: function show(arr) {
-	            this.Tabs(arr, 'show');
+	            return this.Tabs(arr, 'show');
 	        }
 	        //隐藏
 	
 	    }, {
 	        key: 'hide',
 	        value: function hide(arr) {
-	            this.Tabs(arr, 'hide');
+	            return this.Tabs(arr, 'hide');
 	        }
 	        //是否没必填字段
 	
@@ -486,12 +597,18 @@
 	        value: function isValid() {
 	            return this.Xrm.Page.data.getIsValid();
 	        }
+	    }, {
+	        key: 'val',
+	        value: function val(arr, state) {
+	            var arrCopy = [].concat(arr);
+	            return this.Controls(arrCopy, 'val', state);
+	        }
 	        //对tab下的字段控制
 	
 	    }, {
 	        key: 'Tabs',
 	        value: function Tabs(arr, handle, state) {
-	            var _this3 = this;
+	            var _this6 = this;
 	
 	            var Xrm = this.Xrm;
 	            var arrCopy = [].concat(arr);
@@ -505,29 +622,35 @@
 	                        var disabled = new crmAttr()[handle].bind({ contname: tab });
 	                        disabled(state);
 	                    } else {
-	                        _this3.Sections(tab.sections.get(), handle, state);
+	                        _this6.Sections(tab.sections.get(), handle, state);
 	                    }
 	                }
 	            });
 	            this.Sections(conArr, handle, state);
+	            return new crmEntityHandle(this.Xrm, arr);
 	        }
 	        //对Sections下的字段控制
 	
 	    }, {
 	        key: 'Sections',
 	        value: function Sections(sections, handle, state) {
-	            var _this4 = this;
+	            var _this7 = this;
 	
 	            var conArr = [].concat(sections);
 	            sections.forEach(function (section) {
 	                var sec = section;
 	                if (typeof sec === 'string') {
-	                    sec = _this4.getSections(section) || sec;
+	                    sec = _this7.getSections(section) || sec;
 	                }
 	                if (typeof sec !== 'string') {
 	                    var index = conArr.indexOf(section);
 	                    index > -1 && conArr.splice(index, 1);
-	                    _this4.Controls(sec.controls.get(), handle, state);
+	                    if (sec.controls.get().length != 0) {
+	                        _this7.Controls(sec.controls.get(), handle, state);
+	                    }
+	                    // else {
+	                    //     (new crmAttr()[handle]).apply({contname:sec}, [state])
+	                    // }
 	                }
 	            });
 	            this.Controls(conArr, handle, state);
@@ -535,19 +658,22 @@
 	    }, {
 	        key: 'Controls',
 	        value: function Controls(controls, handle, state) {
-	            var _this5 = this;
+	            var _this8 = this;
 	
+	            var returnArr = [];
 	            controls.forEach(function (control) {
 	                if (typeof control == 'string') {
-	                    new crmAttr(_this5.Xrm, control)[handle](state);
+	                    new crmAttr(_this8.Xrm, control)[handle](state);
 	                } else {
 	                    var controlType = control.getControlType();
 	                    if (controlType != 'iframe' && controlType != 'webresource' && controlType != 'subgrid') {
-	                        var disabled = new crmAttr()[handle].bind({ contname: control });
-	                        disabled(state);
+	                        returnArr.push(new crmAttr(_this8.Xrm, control.getName())[handle](state));
+	                    } else {
+	                        new crmAttr()[handle].apply({ contname: control }, [state]);
 	                    }
 	                }
 	            });
+	            return returnArr;
 	        }
 	        //获取节对象Sections
 	
@@ -600,8 +726,157 @@
 	            return this.Xrm.Page.context.getUserName();
 	        }
 	    }]);
-
+	
 	    return crmEntity;
+	}();
+	//内部类
+	
+	
+	var crmEntityHandle = exports.crmEntityHandle = function () {
+	    function crmEntityHandle(Xrm, attrs) {
+	        _classCallCheck(this, crmEntityHandle);
+	
+	        this.Xrm = Xrm;
+	        this.attrs = attrs;
+	    }
+	    //禁用或启用
+	
+	
+	    _createClass(crmEntityHandle, [{
+	        key: 'disabled',
+	        value: function disabled(state) {
+	            this.Tabs('disabled', state);
+	            return this;
+	        }
+	        //显示
+	
+	    }, {
+	        key: 'show',
+	        value: function show() {
+	            this.Tabs('show');
+	            return this;
+	        }
+	        //隐藏
+	
+	    }, {
+	        key: 'hide',
+	        value: function hide() {
+	            this.Tabs('hide');
+	            return this;
+	        }
+	        //对tab下的字段控制
+	
+	    }, {
+	        key: 'Tabs',
+	        value: function Tabs(handle, state) {
+	            return new crmEntity(this.Xrm).Tabs(this.attrs, handle, state);
+	        }
+	    }]);
+
+	    return crmEntityHandle;
+	}();
+
+/***/ },
+/* 2 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var crmProcess = exports.crmProcess = function () {
+	    function crmProcess(Xrm) {
+	        _classCallCheck(this, crmProcess);
+	
+	        this.Xrm = Xrm;
+	        this.uiProcess = this.Xrm.Page && this.Xrm.Page.ui && this.Xrm.Page.ui.process;
+	        this.dataProcess = this.Xrm.Page && this.Xrm.Page.data && this.Xrm.Page.data.process;
+	    }
+	
+	    _createClass(crmProcess, [{
+	        key: "reflow",
+	        value: function reflow() {
+	            this.uiProcess.reflow.apply(this.uiProcess, arguments);
+	        }
+	    }, {
+	        key: "setDisplayState",
+	        value: function setDisplayState() {
+	            this.uiProcess.setDisplayState.apply(this.uiProcess, arguments);
+	        }
+	    }, {
+	        key: "setVisible",
+	        value: function setVisible() {
+	            this.uiProcess.setVisible.apply(this.uiProcess, arguments);
+	        }
+	    }, {
+	        key: "addOnStageChange",
+	        value: function addOnStageChange() {
+	            this.dataProcess.addOnStageChange.apply(this.dataProcess, arguments);
+	        }
+	    }, {
+	        key: "addOnStageSelected",
+	        value: function addOnStageSelected() {
+	            this.dataProcess.addOnStageSelected.apply(this.dataProcess, arguments);
+	        }
+	    }, {
+	        key: "getActivePath",
+	        value: function getActivePath() {
+	            return this.dataProcess.getActivePath.apply(this.dataProcess, arguments);
+	        }
+	    }, {
+	        key: "getActiveProcess",
+	        value: function getActiveProcess() {
+	            return this.dataProcess.getActiveProcess.apply(this.dataProcess, arguments);
+	        }
+	    }, {
+	        key: "getActiveStage",
+	        value: function getActiveStage() {
+	            return this.dataProcess.getActiveStage.apply(this.dataProcess, arguments);
+	        }
+	    }, {
+	        key: "getEnabledProcesses",
+	        value: function getEnabledProcesses() {
+	            return this.dataProcess.getEnabledProcesses.apply(this.dataProcess, arguments);
+	        }
+	    }, {
+	        key: "moveNext",
+	        value: function moveNext() {
+	            return this.dataProcess.moveNext.apply(this.dataProcess, arguments);
+	        }
+	    }, {
+	        key: "movePrevious",
+	        value: function movePrevious() {
+	            return this.dataProcess.movePrevious.apply(this.dataProcess, arguments);
+	        }
+	    }, {
+	        key: "removeOnStageChange",
+	        value: function removeOnStageChange() {
+	            this.dataProcess.removeOnStageChange.apply(this.dataProcess, arguments);
+	        }
+	    }, {
+	        key: "removeOnStageSelected",
+	        value: function removeOnStageSelected() {
+	            this.dataProcess.removeOnStageSelected.apply(this.dataProcess, arguments);
+	        }
+	    }, {
+	        key: "setActiveProcess",
+	        value: function setActiveProcess() {
+	            return this.dataProcess.setActiveProcess.apply(this.dataProcess, arguments);
+	        }
+	    }, {
+	        key: "setActiveStage",
+	        value: function setActiveStage() {
+	            return this.dataProcess.setActiveStage.apply(this.dataProcess, arguments);
+	        }
+	    }]);
+
+	    return crmProcess;
 	}();
 
 /***/ }
