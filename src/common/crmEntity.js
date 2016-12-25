@@ -1,4 +1,4 @@
-export class crmAttr {
+﻿export class crmAttr {
     constructor(Xrm, name) {
         if (!Xrm || !name) {
             return;
@@ -12,14 +12,13 @@ export class crmAttr {
             this.contname = Xrm.Page.ui.tabs.get(name);
         }
         if (!this.attrname && !this.contname) {
-            this.error('not found '
-                + this.name);
+            this.error('not found ' + this.name);
         }
     }
         //获取字段值 crm方法
     getValue() {
         let getval = null
-        if(this.attrname) {
+        if (this.attrname) {
             getval = this.attrname.getValue();
         }
         return getval;
@@ -201,7 +200,7 @@ export class crmAttr {
             lookupById(value, column1Arr).then((res, attrs) => {
                 for (var i = 0; i < columnArr.length; i++) {
                     let attrName = columnArr[i];
-                    if(attrName.endsWith('_a')) {
+                    if (/_a$/.test(attrName)) {
                         attrName = attrName.replace(/_a$/, '');
                         if ((new crmAttr(this.Xrm, attrName)).val()) {
                             continue;
@@ -209,25 +208,28 @@ export class crmAttr {
                     }
                     let attr = attrs.attributes[column1Arr[i]];
                     attr !== null && (
-                            (new crmAttr(this.Xrm, attrName)).setTypeVal(attr)
-                        )
+                        (new crmAttr(this.Xrm, attrName)).setTypeVal(attr)
+                    )
                 }
             })
         }
         return this
     }
     addCustomView(viewDisplayName, fetchXml, columns) {
-        if (this.contname && [1, 2].indexOf(this.crmEntity.type)> -1) {
+        if (this.contname && [1, 2].indexOf(this.crmEntity.type) > -1) {
             const entityName = this.contname.get_dataContext().get_lookupTypeNames().split(':')[0];
-            const columnsStr = columns.map(item => { return `<cell name='${item}' width='300' />` }).join('');
+            const columnsStr = columns.map(item => {
+                return `<cell name='${item}' width='300' />` }).join('');
             const layoutXml = `<grid name='resultset' object='10' jump='${entityName}id' select='1' icon='1' preview='1'><row name='result' id='${entityName}id'>${columnsStr}</row></grid>`;
             this.contname.addCustomView('{00000000-0000-0000-0000-000000000001}', entityName, viewDisplayName, fetchXml, layoutXml, 1);
         }
         return this;
     }
     addFilter(handle, entityType) {
-        if(typeof handle === 'function') {
-            this.addPreSearch(() => { let customFilter = handle(); this.addCustomFilter(customFilter, entityType) })
+        if (typeof handle === 'function') {
+            this.addPreSearch(() => {
+                let customFilter = handle();
+                this.addCustomFilter(customFilter, entityType) })
         }
         return this;
     }
@@ -243,84 +245,88 @@ export class crmAttr {
         }
         return this;
     }
-    //待完善，有问题
+        //待完善，有问题
     setTypeVal(attr) {
         let value = null;
-        if(attr) {
+        if (attr) {
             value = attr.value
         }
         if (this.attrname) {
-            if(!attr) {
-                this.val(value);
+            if (!attr) {
+                this.val(value).change();
                 return this;
             }
             switch (attr.type) {
             case 'a:OptionSetValue':
-                this.val(value);
+                this.val(value).change();
                 break;
             case 'a:EntityReference':
                 let toValue = {};
                 toValue.id = attr.guid;
                 toValue.entityType = attr.logicalName;
                 toValue.name = attr.name;
-                this.val([toValue]);
+                this.val([toValue]).change();
                 break;
             case 'a:EntityCollection':
-                this.val(value);
+                this.val(value).change();
                 break;
             case 'a:Money':
-                this.val(value);
+                this.val(value).change();
                 break;
             case 'a:AliasedValue':
-                this.val(value);
+                this.val(value).change();
                 break;
             case 'c:int':
-                this.val(value);
+                this.val(value).change();
                 break;
             case 'c:decimal':
-                this.val(value);
+                this.val(value).change();
                 break;
             case 'c:dateTime':
-                this.val(value);
+                this.val(value).change();
                 break;
             case 'c:boolean':
-                this.val(value);
+                this.val(value).change();
                 break;
             default:
-                this.val(value);
+                this.val(value).change();
             }
         }
         return this;
     }
     refresh() {
-        if(this.contname) {
+        if (this.contname) {
             typeof this.contname.refresh === 'function' && this.contname.refresh();
         }
         return this;
     }
     setMax(value) {
-        if(this.attrname) {
+        if (this.attrname) {
             var attribute = this.attrname._attribute;
             var setmax = attribute.set_max;
             typeof setmax === 'function' &&
-           (setmax.apply(attribute, [value]))
+                (setmax.apply(attribute, [value]))
         }
         return this
     }
     setMin(value) {
-        if(this.attrname) {
-            var attribute = this.attrname._attribute;
+        if (this.attrname) {
+            var attribute = this.attrname.
+            ttribute;
             var setmin = attribute.set_min;
             typeof setmin === 'function' &&
-           (setmin.apply(attribute, [value]))
+                (setmin.apply(attribute, [value]))
         }
         return this
+    }
+    getOpts() {
+        return new crmEntityOption(this.contname);
     }
 }
 export class crmEntity {
     constructor(Xrm, Sys) {
         this.Xrm = Xrm;
-        this.Sys= Sys;
+        this.Sys = Sys;
     }
         //获取实体Id 属性
     get id() {
@@ -354,13 +360,13 @@ export class crmEntity {
     refRibbon() {
         return this.Xrm.Page.ui.refreshRibbon();
     }
-    //刷新实体
+        //刷新实体
     refresh() {
         setTimeout(() => {
             this.Sys && this.Sys.Application._components.crmGrid && this.Sys.Application._components.crmGrid.refresh();
             this.Xrm.Page.data && this.Xrm.Page.data.refresh();
         }, 50);
-            //this.Xrm.Utility.openEntityForm(this.Xrm.Page.data.entity.getEntityName(), this.Xrm.Page.data.entity.getId())
+        //this.Xrm.Utility.openEntityForm(this.Xrm.Page.data.entity.getEntityName(), this.Xrm.Page.data.entity.getId())
     }
     reload() {
         setTimeout(() => {
@@ -423,7 +429,7 @@ export class crmEntity {
             if (typeof sec !== 'string') {
                 const index = conArr.indexOf(section);
                 index > -1 && conArr.splice(index, 1);
-                if(sec.controls.get().length !=0) {
+                if (sec.controls.get().length != 0) {
                     this.Controls(sec.controls.get(), handle, state);
                 }
                 // else {
@@ -442,9 +448,8 @@ export class crmEntity {
                 var controlType = control.getControlType();
                 if (controlType != 'iframe' && controlType != 'webresource' && controlType != 'subgrid') {
                     returnArr.push((new crmAttr(this.Xrm, control.getName())[handle](state)));
-                }
-                else {
-                    (new crmAttr()[handle]).apply({contname:control}, [state])
+                } else {
+                    (new crmAttr()[handle]).apply({ contname: control }, [state])
                 }
             }
         });
@@ -469,7 +474,7 @@ export class crmEntity {
 export class crmEntityHandle {
     constructor(Xrm, attrs) {
         this.Xrm = Xrm;
-        this.attrs= attrs;
+        this.attrs = attrs;
     }
         //禁用或启用
     disabled(state) {
@@ -488,6 +493,26 @@ export class crmEntityHandle {
     }
         //对tab下的字段控制
     Tabs(handle, state) {
+        
         return new crmEntity(this.Xrm).Tabs(this.attrs, handle, state)
+    }
+}
+export class crmEntityOption {
+    constructor(contname) {
+        this.contname = contname;
+        this.attrname = contname.getAttribute();
+        this.options = [].concat(this.attrname.getOptions());
+    }
+    optVal(arrs) {
+        if (Array.isArray(arrs)) {
+            const value = this.attrname.getValue();
+            this.contname.clearOptions();
+            this.options.forEach((item) => {
+                if (arrs.indexOf(item.value * 1) >= 0) {
+                    this.contname.addOption({ text: item.text, value: item.value })
+                }
+            })
+            this.attrname.setValue(value);
+        }
     }
 }

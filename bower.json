@@ -1,7 +1,7 @@
 {
   "name": "crmisv",
   "description": "",
-  "main": "",
+  "main": "./dist/assets/crmApp.js",
   "moduleType": [],
   "authors": [
     "xfxing"

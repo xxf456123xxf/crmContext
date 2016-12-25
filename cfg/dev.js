@@ -44,6 +44,7 @@ let config = Object.assign({}, baseConfig, {
       manifestFiles:[".bower.json"],
       searchResolveModulesDirectories: false
     })
+    
   ],
   module: defaultSettings.getDefaultModules()
 });

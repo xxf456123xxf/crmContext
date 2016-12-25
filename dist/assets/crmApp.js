@@ -375,7 +375,7 @@
 	                lookupById(value, column1Arr).then(function (res, attrs) {
 	                    for (var i = 0; i < columnArr.length; i++) {
 	                        var attrName = columnArr[i];
-	                        if (attrName.endsWith('_a')) {
+	                        if (/_a$/.test(attrName)) {
 	                            attrName = attrName.replace(/_a$/, '');
 	                            if (new crmAttr(_this2.Xrm, attrName).val()) {
 	                                continue;
@@ -408,7 +408,8 @@
 	
 	            if (typeof handle === 'function') {
 	                this.addPreSearch(function () {
-	                    var customFilter = handle();_this3.addCustomFilter(customFilter, entityType);
+	                    var customFilter = handle();
+	                    _this3.addCustomFilter(customFilter, entityType);
 	                });
 	            }
 	            return this;
@@ -440,43 +441,43 @@
 	            }
 	            if (this.attrname) {
 	                if (!attr) {
-	                    this.val(value);
+	                    this.val(value).change();
 	                    return this;
 	                }
 	                switch (attr.type) {
 	                    case 'a:OptionSetValue':
-	                        this.val(value);
+	                        this.val(value).change();
 	                        break;
 	                    case 'a:EntityReference':
 	                        var toValue = {};
 	                        toValue.id = attr.guid;
 	                        toValue.entityType = attr.logicalName;
 	                        toValue.name = attr.name;
-	                        this.val([toValue]);
+	                        this.val([toValue]).change();
 	                        break;
 	                    case 'a:EntityCollection':
-	                        this.val(value);
+	                        this.val(value).change();
 	                        break;
 	                    case 'a:Money':
-	                        this.val(value);
+	                        this.val(value).change();
 	                        break;
 	                    case 'a:AliasedValue':
-	                        this.val(value);
+	                        this.val(value).change();
 	                        break;
 	                    case 'c:int':
-	                        this.val(value);
+	                        this.val(value).change();
 	                        break;
 	                    case 'c:decimal':
-	                        this.val(value);
+	                        this.val(value).change();
 	                        break;
 	                    case 'c:dateTime':
-	                        this.val(value);
+	                        this.val(value).change();
 	                        break;
 	                    case 'c:boolean':
-	                        this.val(value);
+	                        this.val(value).change();
 	                        break;
 	                    default:
-	                        this.val(value);
+	                        this.val(value).change();
 	                }
 	            }
 	            return this;
@@ -503,11 +504,16 @@
 	        key: 'setMin',
 	        value: function setMin(value) {
 	            if (this.attrname) {
-	                var attribute = this.attrname._attribute;
+	                var attribute = this.attrname.ttribute;
 	                var setmin = attribute.set_min;
 	                typeof setmin === 'function' && setmin.apply(attribute, [value]);
 	            }
 	            return this;
+	        }
+	    }, {
+	        key: 'getOpts',
+	        value: function getOpts() {
+	            return new crmEntityOption(this.contname);
 	        }
 	    }]);
 	
@@ -779,8 +785,38 @@
 	            return new crmEntity(this.Xrm).Tabs(this.attrs, handle, state);
 	        }
 	    }]);
-
+	
 	    return crmEntityHandle;
+	}();
+	
+	var crmEntityOption = exports.crmEntityOption = function () {
+	    function crmEntityOption(contname) {
+	        _classCallCheck(this, crmEntityOption);
+	
+	        this.contname = contname;
+	        this.attrname = contname.getAttribute();
+	        this.options = [].concat(this.attrname.getOptions());
+	    }
+	
+	    _createClass(crmEntityOption, [{
+	        key: 'optVal',
+	        value: function optVal(arrs) {
+	            var _this9 = this;
+	
+	            if (Array.isArray(arrs)) {
+	                var value = this.attrname.getValue();
+	                this.contname.clearOptions();
+	                this.options.forEach(function (item) {
+	                    if (arrs.indexOf(item.value * 1) >= 0) {
+	                        _this9.contname.addOption({ text: item.text, value: item.value });
+	                    }
+	                });
+	                this.attrname.setValue(value);
+	            }
+	        }
+	    }]);
+
+	    return crmEntityOption;
 	}();
 
 /***/ },
