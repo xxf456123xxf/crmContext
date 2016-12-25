@@ -1,5 +1,5 @@
 {
-  "name": "crmisv",
+  "name": "crmContext",
   "description": "",
   "main": "./dist/assets/crmApp.js",
   "moduleType": [],
