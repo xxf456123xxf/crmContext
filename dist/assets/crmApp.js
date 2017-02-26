@@ -47,7 +47,7 @@
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 	exports.crmContext = undefined;
 	
@@ -61,40 +61,99 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
+	/**
+	 * crmContext操作
+	 * @module crmContext
+	 */
 	var crmContext = exports.crmContext = function () {
-	    function crmContext(Xrm, pars) {
-	        _classCallCheck(this, crmContext);
+	  /**
+	   *crmContext 初始化对象
+	   * ```javascript
+	   *var newCrmContext = new crmContext(window.Xrm, { Sys: window.Sys});
+	   *var attr = newCrmContext.attr.bind(newCrmContext);
+	   *var entity = newCrmContext.entity;
+	   *var process = newCrmContext.process;
+	   *var crmGridList = newCrmContext.crmGridList.bind(newCrmContext);
+	   *
+	   * ```
+	   * @class crmContext
+	   * @constructor
+	   * @param {object} [Xrm]
+	   * @param {object} [pars] {Sys}
+	  */
+	  function crmContext(Xrm, pars) {
+	    _classCallCheck(this, crmContext);
 	
-	        this.Xrm = Xrm;
-	        this.pars = pars || {};
+	    this.Xrm = Xrm;
+	    this.pars = pars || {};
+	  }
+	  /**
+	   * 获取crmAttr对象{{#crossLink "crmAttr/getOpts"}}{{/crossLink}}
+	   * @method attr
+	   * @param  {string} name 字段名
+	   * @return {object} crmAttr对象
+	   */
+	
+	
+	  _createClass(crmContext, [{
+	    key: 'attr',
+	    value: function attr(name) {
+	      return new _crmEntity.crmAttr(this.Xrm, name);
 	    }
+	    /**
+	    * 获取crmEntity对象
+	    * @property entity
+	    * @type object
+	    */
 	
-	    _createClass(crmContext, [{
-	        key: 'attr',
-	        value: function attr(name) {
-	            return new _crmEntity.crmAttr(this.Xrm, name);
-	        }
-	    }, {
-	        key: 'crmGridList',
-	        value: function crmGridList(name) {
-	            return new _crmGridList2.crmGridList(this.pars.Sys, name);
-	        }
-	    }, {
-	        key: 'entity',
-	        get: function get() {
-	            return new _crmEntity.crmEntity(this.Xrm, this.pars.Sys);
-	        }
-	    }, {
-	        key: 'process',
-	        get: function get() {
-	            return new _crmProcess.crmProcess(this.Xrm);
-	        }
-	    }]);
+	  }, {
+	    key: 'crmGridList',
 	
-	    return crmContext;
+	    /**
+	     * 获取crmGridList对象
+	     * @method crmGridList
+	     * @param  {string} name 子网格名称
+	     * @return {object} crmGridList
+	     */
+	    value: function crmGridList(name) {
+	      return new _crmGridList2.crmGridList(this.pars.Sys, name);
+	    }
+	  }, {
+	    key: 'entity',
+	    get: function get() {
+	      return new _crmEntity.crmEntity(this.Xrm, this.pars.Sys);
+	    }
+	    /**
+	     * 获取crmProcess对象
+	     * @property process
+	     * @type object
+	     */
+	
+	  }, {
+	    key: 'process',
+	    get: function get() {
+	      return new _crmProcess.crmProcess(this.Xrm);
+	    }
+	  }]);
+	
+	  return crmContext;
 	}();
 	
-	window.crmContext = crmContext;
+	exports.default = crmContext;
+	// var  c  = { d: crmContext}
+	// if (typeof exports !== 'undefined') {
+	//     if (typeof module !== 'undefined' && module.exports) {
+	//         exports = module.exports = c;
+	//     }
+	//     exports.c = c;
+	// } else {
+	//     window.c = c;
+	// }
+	// if (typeof define === 'function' && define.amd) {
+	//     define('c', [], function() {
+	//         return c;
+	//     });
+	// }
 
 /***/ },
 /* 1 */
@@ -110,7 +169,28 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
+	/**
+	 * 表单操作
+	 * @module Entity
+	 */
 	var crmAttr = function () {
+	    /**
+	     *crmAttr 初始化对象
+	     * @class crmAttr
+	     * @param {object} [Xrm]
+	     * @param {object} [name]
+	     * @constructor
+	    */
+	    /**
+	     * getAttribute对象
+	     * @property attrname
+	     * @type object
+	     */
+	    /**
+	     * getControl对象
+	     * @property contname
+	     * @type object
+	     */
 	    function crmAttr(Xrm, name) {
 	        _classCallCheck(this, crmAttr);
 	
@@ -119,17 +199,23 @@
 	        }
 	        this.Xrm = Xrm;
 	        this.name = name;
-	        this.attrname = Xrm.Page.getAttribute(name);
-	        this.contname = Xrm.Page.getControl(name);
+	        this.attrname = Xrm.Page.getAttribute(this.name);
+	        this.contname = Xrm.Page.getControl(this.name);
 	        this.crmEntity = new crmEntity(Xrm);
 	        if (!this.contname) {
-	            this.contname = Xrm.Page.ui.tabs.get(name);
+	            this.contname = Xrm.Page.ui.tabs.get(this.name);
 	        }
 	        if (!this.attrname && !this.contname) {
 	            this.error('not found ' + this.name);
 	        }
 	    }
-	    //获取字段值 crm方法
+	    /**
+	       * 获取字段值
+	       * @method getValue
+	       * @return {object} value
+	       * @example
+	       *     attr('new_name').getValue();
+	       */
 	
 	
 	    _createClass(crmAttr, [{
@@ -141,7 +227,11 @@
 	            }
 	            return getval;
 	        }
-	        //获取字段值 Lookup返回第一个值
+	        /**
+	         * 获取字段值 Lookup返回第一个值
+	         * @method get
+	         * @return {object} value
+	         */
 	
 	    }, {
 	        key: 'get',
@@ -155,7 +245,16 @@
 	            }
 	            return getval;
 	        }
-	        //设置和获取值  lookup获取Id
+	        /**
+	         * 设置和获取值
+	         * @method val
+	         * @param  {object} val 设置值
+	         * @optional
+	         * @return {object} this 获取值
+	         * @example
+	         *      attr('new_name').val() //获取值
+	         *      attr('new_name').val('名称') //设置值并设置成始终提交 不触发chagne事件
+	         */
 	
 	    }, {
 	        key: 'val',
@@ -173,7 +272,11 @@
 	            }
 	            return arguments.length === 0 ? obj : this;
 	        }
-	        //显示
+	        /**
+	         * 显示字段
+	         * @method show
+	         * @return {object} this
+	         */
 	
 	    }, {
 	        key: 'show',
@@ -183,7 +286,11 @@
 	            }
 	            return this;
 	        }
-	        //隐藏
+	        /**
+	         * 隐藏字段
+	         * @method hide
+	         * @return {object} this
+	         */
 	
 	    }, {
 	        key: 'hide',
@@ -193,21 +300,63 @@
 	            }
 	            return this;
 	        }
-	        //禁用
+	        /**
+	         * 获取属性name|text值
+	         * @method text
+	         * @return {string}
+	         * @example
+	         *      attr('ownerid').text() //owneridname
+	         */
+	
+	    }, {
+	        key: 'text',
+	        value: function text() {
+	            if (this.contname) {
+	                if (typeof this.attrname.getText == 'function') {
+	                    return this.attrname.getText();
+	                }
+	                var obj = this.attrname.getValue();
+	                if (Array.isArray(obj)) {
+	                    return obj[0].name;
+	                }
+	                return obj;
+	            }
+	            return null;
+	        }
+	        /**
+	         * 禁用
+	         * @method disabled
+	         * @param  {int} [state=1] 0=启用，1=禁用
+	         * @required
+	         * @return {object} this
+	         * @example
+	         *      attr('new_name').disabled() //禁用
+	         *      attr('new_name').disabled(0) //启用
+	         */
 	
 	    }, {
 	        key: 'disabled',
-	        value: function disabled() {
+	        value: function disabled(state) {
 	            var disabled = 1;
 	            if (this.contname) {
-	                if (arguments[0] != undefined) {
-	                    disabled = arguments[0];
+	                if (state != undefined) {
+	                    disabled = state;
 	                }
 	                typeof this.contname.setDisabled === 'function' && this.contname.setDisabled(disabled);
 	            }
 	            return this;
 	        }
-	        //绑定或触发change
+	        /**
+	         * 绑定或触发change事件
+	         * @method  change
+	         * @param  {function} change 触发事件
+	         * @param  {int} isChange 为1时触发
+	         * @return {object} this
+	         * @example
+	         *      attr('new_name').change() //触发change事件
+	         *      attr('new_name').change(this.nameChange) //绑定change事件
+	         *      attr('new_name').change(this.nameChange, 1) //绑定change事件并触发
+	         */
 	
 	    }, {
 	        key: 'change',
@@ -226,7 +375,12 @@
 	            }
 	            return this;
 	        }
-	        //移除change方法
+	        /**
+	         * 移除change事件
+	         * @method removechange
+	         * @param  {change} change
+	         * @return {object} this
+	         */
 	
 	    }, {
 	        key: 'removechange',
@@ -236,7 +390,15 @@
 	            }
 	            return this;
 	        }
-	        //字段必填
+	        /**
+	         * 字段必填
+	         * @method required
+	         * @param  {int} a 0=none,1=required
+	         * @return {object} this
+	         * @example
+	         *      attr('new_name').required() //必填
+	         *      attr('new_name').required(0) //不必填
+	         */
 	
 	    }, {
 	        key: 'required',
@@ -246,7 +408,15 @@
 	            }
 	            return this;
 	        }
-	        //提交模式 默认设置成always, 对字段赋值会调用
+	        /**
+	         * 提交模式
+	         * @method mode
+	         * @param  {int} modetype  1=always,0=never
+	         * @return {object} this
+	         * @example
+	         *      attr('new_name').mode() //始终提交字段值
+	         *      attr('new_name').mode(0) //不提交字段值
+	         */
 	
 	    }, {
 	        key: 'mode',
@@ -267,7 +437,12 @@
 	            }
 	            return this;
 	        }
-	        // 默认值
+	        /**
+	         * 窗体创建时设置默认值
+	         * @method default
+	         * @param  {object} val 值
+	         * @return {object} this
+	         */
 	
 	    }, {
 	        key: 'default',
@@ -277,7 +452,11 @@
 	            }
 	            return this;
 	        }
-	        //Lookup字段设置当前登录人
+	        /**
+	         * Lookup字段设置当前登录人
+	         * @method user
+	         * @return {object} this
+	         */
 	
 	    }, {
 	        key: 'user',
@@ -291,6 +470,17 @@
 	            }
 	            return this;
 	        }
+	        /**
+	         * 设置lookup 值
+	         * @method setLookup
+	         * @param  {string} entityType
+	         * @param  {guid} id
+	         * @param  {string} name
+	         * @return {object} [this]
+	         * @example
+	         *      attr('ownerid').setLookup('systemuser','guid','管理员') //设置查找字段值
+	         */
+	
 	    }, {
 	        key: 'setLookup',
 	        value: function setLookup(entityType, id, name) {
@@ -303,15 +493,27 @@
 	            }
 	            return this;
 	        }
+	        /**
+	         * 清除字段值
+	         * @method clear
+	         * @return {object} this
+	         * @example
+	         *      attr('new_name').clear() //清除字段值
+	         */
+	
 	    }, {
 	        key: 'clear',
 	        value: function clear() {
-	            if (this.contname) {
+	            if (this.contname && this.val()) {
 	                this.val(null);
 	            }
 	            return this;
 	        }
-	        //设置焦点
+	        /**
+	         * 设置焦点
+	         * @method focus
+	         * @return {object} this
+	         */
 	
 	    }, {
 	        key: 'focus',
@@ -321,7 +523,12 @@
 	            }
 	            return this;
 	        }
-	        // 当前提示类型判断
+	        /**
+	         * 判断窗体类型
+	         * @method type
+	         * @param  {int} type 窗体类型
+	         * @return {object} this
+	         */
 	
 	    }, {
 	        key: 'type',
@@ -334,13 +541,27 @@
 	        value: function error(message) {
 	            window.console && typeof window.console.error === 'function' && window.console.error(message);
 	        }
-	        //保存
+	        /**
+	         * 保存实体
+	         * @method save
+	         * @return {object} 保存后的事件
+	         */
 	
 	    }, {
 	        key: 'save',
 	        value: function save() {
 	            return this.crmEntity.save();
 	        }
+	        /**
+	         * @method option
+	         * @param  {array} arr
+	         * @param  {string} handle attr方法名
+	         * @param  {object} state 值
+	         * @return {object}
+	         * @example
+	         *      attr('new_name').option({ 'tab1': '100000000', 'tab2': '100000000', 'tab3': '100000001' }, 'hide').show() //new_name值为100000000时显示tab1、tab2，为100000001显示tab3
+	         */
+	
 	    }, {
 	        key: 'option',
 	        value: function option(obj, handle, state) {
@@ -357,7 +578,15 @@
 	            }
 	            return new crmEntityHandle(this.Xrm, arr);
 	        }
-	        //查找字段带值 ，表单字段列，查找字段列，查询的数据
+	        /**
+	         * 查找字段带值
+	         * @method setByVal
+	         * @param  {array} columns 表单字段列
+	         * @param  {array} columns1 查找字段列
+	         * @param  {function} lookupById 查询方法
+	         * @example
+	         *      attr('new_productid').setByVal(['new_productname',['ownerid$empty']], ['new_name','ownerid'], request.lookupById) //产品查找产品名称赋值、ownerid为null时赋值,会触发change事件
+	         */
 	
 	    }, {
 	        key: 'setByVal',
@@ -375,8 +604,8 @@
 	                lookupById(value, column1Arr).then(function (res, attrs) {
 	                    for (var i = 0; i < columnArr.length; i++) {
 	                        var attrName = columnArr[i];
-	                        if (/_a$/.test(attrName)) {
-	                            attrName = attrName.replace(/_a$/, '');
+	                        if (/\$empty$/.test(attrName)) {
+	                            attrName = attrName.replace(/\$empty$/, '');
 	                            if (new crmAttr(_this2.Xrm, attrName).val()) {
 	                                continue;
 	                            }
@@ -388,6 +617,16 @@
 	            }
 	            return this;
 	        }
+	        /**
+	         * 添加自定义视图
+	         * @method addCustomView
+	         * @param  {string}  viewDisplayName 视图名称
+	         * @param  {string} fetchXml fetchXML字符串
+	         * @param  {array} columns 显示的列
+	         * @example
+	         *      attr('new_productid').addCustomView('可选产品', fetchXml,['new_name']) //添加自定义视图
+	         */
+	
 	    }, {
 	        key: 'addCustomView',
 	        value: function addCustomView(viewDisplayName, fetchXml, columns) {
@@ -401,6 +640,19 @@
 	            }
 	            return this;
 	        }
+	        /**
+	         *添加自定义查询条件
+	         * @method addFilter
+	         * @param  {function} handle 返回filterXML
+	         * @param  {string} entityType 可不传
+	         * @example
+	         *      productCustomFilter = function() {
+	         *           return '<filter type=\'and\'><condition attribute=\'new_name\' operator=\'like\' value=\'%产品%\' /></filter>';
+	         *      }
+	         *      attr('new_productid').addFilter(productCustomFilter) //产品视图添加filter条件
+	         *
+	         */
+	
 	    }, {
 	        key: 'addFilter',
 	        value: function addFilter(handle, entityType) {
@@ -482,6 +734,12 @@
 	            }
 	            return this;
 	        }
+	        /**
+	         * 刷新字段值
+	         * @method refresh
+	         * @return {object} this
+	         */
+	
 	    }, {
 	        key: 'refresh',
 	        value: function refresh() {
@@ -490,6 +748,12 @@
 	            }
 	            return this;
 	        }
+	        /**
+	         * 数字字段设置最大值
+	         * @method setMax
+	         * @param  {int} value 值
+	         */
+	
 	    }, {
 	        key: 'setMax',
 	        value: function setMax(value) {
@@ -500,6 +764,12 @@
 	            }
 	            return this;
 	        }
+	        /**
+	         * 数字字段设置最小值
+	         * @method setMin
+	         * @param  {int} value 值
+	         */
+	
 	    }, {
 	        key: 'setMin',
 	        value: function setMin(value) {
@@ -510,10 +780,35 @@
 	            }
 	            return this;
 	        }
+	        /**
+	         * 获取crmEntityOption对象
+	         * @method getOpts
+	         * @return {object} 返回下拉值操作对象
+	         * @example
+	         *      var types = attr('new_type').getOpts()
+	         *      types.optVal([100000000]) //只显示下拉值100000000
+	         *      types.optVal([100000001]) //只显示下拉值100000001
+	         *      types.remove([100000001]) //移除下拉值100000001
+	         */
+	
 	    }, {
 	        key: 'getOpts',
 	        value: function getOpts() {
 	            return new crmEntityOption(this.contname);
+	        }
+	        /**
+	         * 字段是否编辑
+	         * @method isDirty
+	         * @return {Boolean}
+	         */
+	
+	    }, {
+	        key: 'isDirty',
+	        value: function isDirty() {
+	            if (this.attrname) {
+	                this.attrname.getIsDirty();
+	            }
+	            return true;
 	        }
 	    }]);
 	
@@ -523,37 +818,68 @@
 	exports.crmAttr = crmAttr;
 	
 	var crmEntity = exports.crmEntity = function () {
+	    /**
+	     *crmEntity 初始化对象
+	     * @class crmEntity
+	     * @constructor
+	    */
 	    function crmEntity(Xrm, Sys) {
 	        _classCallCheck(this, crmEntity);
 	
 	        this.Xrm = Xrm;
 	        this.Sys = Sys;
 	    }
-	    //获取实体Id 属性
+	    /**
+	    * 获取实体Id
+	    * @property id
+	    * @type guid
+	    * @example
+	    *       ent.id //guid
+	    */
 	
 	
 	    _createClass(crmEntity, [{
 	        key: 'isowner',
 	
-	        //判断是否是当前登录人 属性
+	        /**
+	        * 判断是否是当前登录人
+	        * @property userid
+	        * @type {boolean}
+	        * @example
+	        *       ent.isowner()
+	        */
 	        value: function isowner() {
 	            return this.userid == new crmAttr(this.Xrm, 'ownerid').val();
 	        }
-	        //保存
+	        /**
+	         * 保存
+	         * @method save
+	         * @return {object} 保存成功后事件
+	         * @example
+	         *      ent.save().then(function() {
+	         *          //保存之后执行
+	         *      })
+	         */
 	
 	    }, {
 	        key: 'save',
 	        value: function save() {
 	            return this.Xrm.Page.data.save();
 	        }
-	        //刷新按钮
+	        /**
+	         * 刷新Ribbon
+	         * @method refRibbon
+	         */
 	
 	    }, {
 	        key: 'refRibbon',
 	        value: function refRibbon() {
 	            return this.Xrm.Page.ui.refreshRibbon();
 	        }
-	        //刷新实体
+	        /**
+	         * 刷新实体或刷新列表
+	         * @method refresh
+	         */
 	
 	    }, {
 	        key: 'refresh',
@@ -566,6 +892,11 @@
 	            }, 50);
 	            //this.Xrm.Utility.openEntityForm(this.Xrm.Page.data.entity.getEntityName(), this.Xrm.Page.data.entity.getId())
 	        }
+	        /**
+	         * 重新加载实体
+	         * @method reload
+	         */
+	
 	    }, {
 	        key: 'reload',
 	        value: function reload() {
@@ -575,48 +906,89 @@
 	                _this5.Xrm.Utility.openEntityForm(_this5.Xrm.Page.data.entity.getEntityName(), _this5.Xrm.Page.data.entity.getId());
 	            }, 1);
 	        }
-	        //禁用或启用窗体所有字段
+	        /**
+	         * 禁用或启用窗体所有字段
+	         * @method disabledAll
+	         * @param  {int} [state=1] 0=启用,1=禁用
+	         * @return {object} this
+	         */
 	
 	    }, {
 	        key: 'disabledAll',
 	        value: function disabledAll(state) {
 	            this.Controls(this.Xrm.Page.ui.controls, 'disabled', state);
 	        }
-	        //禁用或启用
+	        /**
+	         * 禁用或启用窗体部分字段
+	         * @method disabled
+	         * @param  {array} arr Tab\Sections\Controls
+	         * @param  {object} {state=1}
+	         * @return {object} this
+	         */
 	
 	    }, {
 	        key: 'disabled',
 	        value: function disabled(arr, state) {
 	            return this.Tabs(arr, 'disabled', state);
 	        }
-	        //显示
+	        /**
+	         * 显示窗体部分字段
+	         * @method show
+	         * @param  {array} arr Tab\Sections\Controls
+	         * @return {object} this
+	         */
 	
 	    }, {
 	        key: 'show',
 	        value: function show(arr) {
 	            return this.Tabs(arr, 'show');
 	        }
-	        //隐藏
+	        /**
+	         * 隐藏窗体部分字段
+	         * @method hide
+	         * @param  {array} arr Tab\Sections\Controls
+	         * @return {object} this
+	         */
 	
 	    }, {
 	        key: 'hide',
 	        value: function hide(arr) {
 	            return this.Tabs(arr, 'hide');
 	        }
-	        //是否没必填字段
+	        /**
+	         * 验证窗体必填字段
+	         * @method isValid
+	         * @return {Boolean}
+	         */
 	
 	    }, {
 	        key: 'isValid',
 	        value: function isValid() {
 	            return this.Xrm.Page.data.getIsValid();
 	        }
+	        /**
+	         * 设置窗体字段value值
+	         * @method val
+	         * @param  {array} arr Controls
+	         * @param  {object} value 值
+	         * @return {object} this
+	         */
+	
 	    }, {
 	        key: 'val',
-	        value: function val(arr, state) {
+	        value: function val(arr, value) {
 	            var arrCopy = [].concat(arr);
-	            return this.Controls(arrCopy, 'val', state);
+	            return this.Controls(arrCopy, 'val', value);
 	        }
-	        //对tab下的字段控制
+	        /**
+	         * Tabs控制
+	         * @method Tabs
+	         * @param  {array} arr Tab\Sections\Controls
+	         * @param  {string} handle crmAttr方法名
+	         * @param  {object} state 方法参数
+	         * @example
+	         *      ent.Tabs(['tab1','tab1_section_1','new_name'], 'disabled').hide() //禁用并隐藏
+	         */
 	
 	    }, {
 	        key: 'Tabs',
@@ -642,7 +1014,16 @@
 	            this.Sections(conArr, handle, state);
 	            return new crmEntityHandle(this.Xrm, arr);
 	        }
-	        //对Sections下的字段控制
+	        /**
+	         * Sections控制
+	         * @method Sections
+	         * @param  {array} arr Sections\Controls
+	         * @param  {string} handle crmAttr方法名
+	         * @param  {object} state 方法参数
+	         * @return {object} this
+	         * @example
+	         *      ent.Tabs(['tab1_section_1','new_name'], 'disabled').hide() //禁用并隐藏
+	         */
 	
 	    }, {
 	        key: 'Sections',
@@ -667,7 +1048,19 @@
 	                }
 	            });
 	            this.Controls(conArr, handle, state);
+	            return new crmEntityHandle(this.Xrm, sections);
 	        }
+	        /**
+	         * Controls控制
+	         * @method Controls
+	         * @param  {array} arr Controls
+	         * @param  {string} handle crmAttr方法名
+	         * @param  {object} state 方法参数
+	         * @return {object} this
+	         * @example
+	         *      ent.Tabs(['new_name'], 'disabled').hide() //禁用并隐藏
+	         */
+	
 	    }, {
 	        key: 'Controls',
 	        value: function Controls(controls, handle, state) {
@@ -710,28 +1103,52 @@
 	        get: function get() {
 	            return this.Xrm.Page.data.entity.getId();
 	        }
-	        //获取实体name 属性
+	        /**
+	        * 获取实体name
+	        * @property name
+	        * @type string
+	        * @example
+	        *       ent.name
+	        */
 	
 	    }, {
 	        key: 'name',
 	        get: function get() {
 	            return this.Xrm.Page.data.entity.getEntityName();
 	        }
-	        //获取实体类型 属性
+	        /**
+	        * 获取窗体类型
+	        * @property type
+	        * @type string
+	        * @example
+	        *       ent.type
+	        */
 	
 	    }, {
 	        key: 'type',
 	        get: function get() {
 	            return this.Xrm.Page.ui.getFormType();
 	        }
-	        //获取登录人id  属性
+	        /**
+	        * 获取登录人id
+	        * @property userid
+	        * @type guid
+	        * @example
+	        *       ent.userid
+	        */
 	
 	    }, {
 	        key: 'userid',
 	        get: function get() {
 	            return this.Xrm.Page.context.getUserId();
 	        }
-	        //获取登录人name 属性
+	        /**
+	        * 获取登录人name
+	        * @property username
+	        * @type string
+	        * @example
+	        *       ent.username
+	        */
 	
 	    }, {
 	        key: 'username',
@@ -790,6 +1207,11 @@
 	}();
 	
 	var crmEntityOption = exports.crmEntityOption = function () {
+	    /**
+	    *crmEntityOption 初始化对象(通过crmAttr/getOpts获取)
+	    * @class crmEntityOption
+	    * @constructor
+	    */
 	    function crmEntityOption(contname) {
 	        _classCallCheck(this, crmEntityOption);
 	
@@ -797,6 +1219,12 @@
 	        this.attrname = contname.getAttribute();
 	        this.options = [].concat(this.attrname.getOptions());
 	    }
+	    /**
+	     * 设置下拉值
+	     * @method optVal
+	     * @param  {array} arr 下拉值
+	     */
+	
 	
 	    _createClass(crmEntityOption, [{
 	        key: 'optVal',
@@ -814,6 +1242,22 @@
 	                this.attrname.setValue(value);
 	            }
 	        }
+	        /**
+	         * 移除下拉值
+	         * @method remove
+	         * @param  {array} arr 下拉值
+	         */
+	
+	    }, {
+	        key: 'remove',
+	        value: function remove(arr) {
+	            var _this10 = this;
+	
+	            var arrs = [].concat(arr);
+	            arrs.forEach(function (item) {
+	                _this10.contname.removeOption(item);
+	            });
+	        }
 	    }]);
 
 	    return crmEntityOption;
@@ -826,100 +1270,178 @@
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
+	/**
+	 * 业务流程操作
+	 * @module crmProcess
+	 */
 	var crmProcess = exports.crmProcess = function () {
-	    function crmProcess(Xrm) {
-	        _classCallCheck(this, crmProcess);
+	  /**
+	   *crmProcess 初始化对象
+	   * @class crmProcess
+	   * @constructor
+	  */
+	  function crmProcess(Xrm) {
+	    _classCallCheck(this, crmProcess);
 	
-	        this.Xrm = Xrm;
-	        this.uiProcess = this.Xrm.Page && this.Xrm.Page.ui && this.Xrm.Page.ui.process;
-	        this.dataProcess = this.Xrm.Page && this.Xrm.Page.data && this.Xrm.Page.data.process;
+	    this.Xrm = Xrm;
+	    this.uiProcess = this.Xrm.Page && this.Xrm.Page.ui && this.Xrm.Page.ui.process;
+	    this.dataProcess = this.Xrm.Page && this.Xrm.Page.data && this.Xrm.Page.data.process;
+	  }
+	  /**
+	   * @method reflow
+	   * @return {[type]}
+	   */
+	
+	
+	  _createClass(crmProcess, [{
+	    key: "reflow",
+	    value: function reflow() {
+	      this.uiProcess.reflow.apply(this.uiProcess, arguments);
 	    }
+	    /**
+	     * @method setDisplayState
+	     */
 	
-	    _createClass(crmProcess, [{
-	        key: "reflow",
-	        value: function reflow() {
-	            this.uiProcess.reflow.apply(this.uiProcess, arguments);
-	        }
-	    }, {
-	        key: "setDisplayState",
-	        value: function setDisplayState() {
-	            this.uiProcess.setDisplayState.apply(this.uiProcess, arguments);
-	        }
-	    }, {
-	        key: "setVisible",
-	        value: function setVisible() {
-	            this.uiProcess.setVisible.apply(this.uiProcess, arguments);
-	        }
-	    }, {
-	        key: "addOnStageChange",
-	        value: function addOnStageChange() {
-	            this.dataProcess.addOnStageChange.apply(this.dataProcess, arguments);
-	        }
-	    }, {
-	        key: "addOnStageSelected",
-	        value: function addOnStageSelected() {
-	            this.dataProcess.addOnStageSelected.apply(this.dataProcess, arguments);
-	        }
-	    }, {
-	        key: "getActivePath",
-	        value: function getActivePath() {
-	            return this.dataProcess.getActivePath.apply(this.dataProcess, arguments);
-	        }
-	    }, {
-	        key: "getActiveProcess",
-	        value: function getActiveProcess() {
-	            return this.dataProcess.getActiveProcess.apply(this.dataProcess, arguments);
-	        }
-	    }, {
-	        key: "getActiveStage",
-	        value: function getActiveStage() {
-	            return this.dataProcess.getActiveStage.apply(this.dataProcess, arguments);
-	        }
-	    }, {
-	        key: "getEnabledProcesses",
-	        value: function getEnabledProcesses() {
-	            return this.dataProcess.getEnabledProcesses.apply(this.dataProcess, arguments);
-	        }
-	    }, {
-	        key: "moveNext",
-	        value: function moveNext() {
-	            return this.dataProcess.moveNext.apply(this.dataProcess, arguments);
-	        }
-	    }, {
-	        key: "movePrevious",
-	        value: function movePrevious() {
-	            return this.dataProcess.movePrevious.apply(this.dataProcess, arguments);
-	        }
-	    }, {
-	        key: "removeOnStageChange",
-	        value: function removeOnStageChange() {
-	            this.dataProcess.removeOnStageChange.apply(this.dataProcess, arguments);
-	        }
-	    }, {
-	        key: "removeOnStageSelected",
-	        value: function removeOnStageSelected() {
-	            this.dataProcess.removeOnStageSelected.apply(this.dataProcess, arguments);
-	        }
-	    }, {
-	        key: "setActiveProcess",
-	        value: function setActiveProcess() {
-	            return this.dataProcess.setActiveProcess.apply(this.dataProcess, arguments);
-	        }
-	    }, {
-	        key: "setActiveStage",
-	        value: function setActiveStage() {
-	            return this.dataProcess.setActiveStage.apply(this.dataProcess, arguments);
-	        }
-	    }]);
+	  }, {
+	    key: "setDisplayState",
+	    value: function setDisplayState() {
+	      this.uiProcess.setDisplayState.apply(this.uiProcess, arguments);
+	    }
+	    /**
+	     * @method setVisible
+	     */
+	
+	  }, {
+	    key: "setVisible",
+	    value: function setVisible() {
+	      this.uiProcess.setVisible.apply(this.uiProcess, arguments);
+	    }
+	    /**
+	     * @method addOnStageChange
+	     */
+	
+	  }, {
+	    key: "addOnStageChange",
+	    value: function addOnStageChange() {
+	      this.dataProcess.addOnStageChange.apply(this.dataProcess, arguments);
+	    }
+	    /**
+	     * @method addOnStageSelected
+	     */
+	
+	  }, {
+	    key: "addOnStageSelected",
+	    value: function addOnStageSelected() {
+	      this.dataProcess.addOnStageSelected.apply(this.dataProcess, arguments);
+	    }
+	    /**
+	     * @method getActivePath
+	     * @return {[type]}
+	     */
+	
+	  }, {
+	    key: "getActivePath",
+	    value: function getActivePath() {
+	      return this.dataProcess.getActivePath.apply(this.dataProcess, arguments);
+	    }
+	    /**
+	     * @method getActiveProcess
+	     * @return {[type]}
+	     */
+	
+	  }, {
+	    key: "getActiveProcess",
+	    value: function getActiveProcess() {
+	      return this.dataProcess.getActiveProcess.apply(this.dataProcess, arguments);
+	    }
+	    /**
+	     * @method getActiveStage
+	     * @return {[type]}
+	     */
+	
+	  }, {
+	    key: "getActiveStage",
+	    value: function getActiveStage() {
+	      return this.dataProcess.getActiveStage.apply(this.dataProcess, arguments);
+	    }
+	    /**
+	     * @method getEnabledProcesses
+	     * @return {[type]}
+	     */
+	
+	  }, {
+	    key: "getEnabledProcesses",
+	    value: function getEnabledProcesses() {
+	      return this.dataProcess.getEnabledProcesses.apply(this.dataProcess, arguments);
+	    }
+	    /**
+	     * @method moveNext
+	     * @return {[type]}
+	     */
+	
+	  }, {
+	    key: "moveNext",
+	    value: function moveNext() {
+	      return this.dataProcess.moveNext.apply(this.dataProcess, arguments);
+	    }
+	    /**
+	     * @method movePrevious
+	     * @return {[type]}
+	     */
+	
+	  }, {
+	    key: "movePrevious",
+	    value: function movePrevious() {
+	      return this.dataProcess.movePrevious.apply(this.dataProcess, arguments);
+	    }
+	    /**
+	     * @method removeOnStageChange
+	     * @return {[type]}
+	     */
+	
+	  }, {
+	    key: "removeOnStageChange",
+	    value: function removeOnStageChange() {
+	      this.dataProcess.removeOnStageChange.apply(this.dataProcess, arguments);
+	    }
+	    /**
+	     * @method removeOnStageSelected
+	     * @return {[type]}
+	     */
+	
+	  }, {
+	    key: "removeOnStageSelected",
+	    value: function removeOnStageSelected() {
+	      this.dataProcess.removeOnStageSelected.apply(this.dataProcess, arguments);
+	    }
+	    /**
+	     * @method setActiveProcess
+	     */
+	
+	  }, {
+	    key: "setActiveProcess",
+	    value: function setActiveProcess() {
+	      return this.dataProcess.setActiveProcess.apply(this.dataProcess, arguments);
+	    }
+	    /**
+	     * @method setActiveStage
+	     */
+	
+	  }, {
+	    key: "setActiveStage",
+	    value: function setActiveStage() {
+	      return this.dataProcess.setActiveStage.apply(this.dataProcess, arguments);
+	    }
+	  }]);
 
-	    return crmProcess;
+	  return crmProcess;
 	}();
 
 /***/ },
@@ -936,7 +1458,16 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
+	/**
+	 * 子网格操作
+	 * @module crmGridList
+	 */
 	var crmGridList = exports.crmGridList = function () {
+	    /**
+	     *crmGridList 初始化对象
+	     * @class crmGridList
+	     * @constructor
+	    */
 	    function crmGridList(Sys, name) {
 	        _classCallCheck(this, crmGridList);
 	
@@ -945,9 +1476,21 @@
 	            this.logError('not crmGridList name : ' + this.contname);
 	        }
 	    }
+	    /**
+	     * list
+	     * @property list
+	     * @type array
+	     */
+	
 	
 	    _createClass(crmGridList, [{
 	        key: 'getSelectIds',
+	
+	        /**
+	         * getSelectIds
+	         * @property getSelectIds
+	         * @type array
+	         */
 	        value: function getSelectIds() {
 	            if (!this.contname) {
 	                return [];
@@ -967,6 +1510,12 @@
 	            }
 	            return this.contname.get_allRecords();
 	        }
+	        /**
+	         * listIds
+	         * @property listIds
+	         * @type array
+	         */
+	
 	    }, {
 	        key: 'listIds',
 	        get: function get() {
@@ -975,6 +1524,12 @@
 	            }
 	            return this.contname.get_allRecordIds();
 	        }
+	        /**
+	         * count
+	         * @property count
+	         * @type int
+	         */
+	
 	    }, {
 	        key: 'count',
 	        get: function get() {
