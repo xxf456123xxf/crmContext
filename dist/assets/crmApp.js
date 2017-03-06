@@ -806,7 +806,7 @@
 	        key: 'isDirty',
 	        value: function isDirty() {
 	            if (this.attrname) {
-	                this.attrname.getIsDirty();
+	                return this.attrname.getIsDirty();
 	            }
 	            return true;
 	        }
@@ -831,10 +831,12 @@
 	    }
 	    /**
 	    * 获取实体Id
+	    *```javascript
+	    * ent.id
+	    *
+	    *```
 	    * @property id
 	    * @type guid
-	    * @example
-	    *       ent.id //guid
 	    */
 	
 	
@@ -843,8 +845,8 @@
 	
 	        /**
 	        * 判断是否是当前登录人
-	        * @property userid
-	        * @type {boolean}
+	        * @method isowner
+	        * @return {boolean}
 	        * @example
 	        *       ent.isowner()
 	        */
@@ -1058,7 +1060,7 @@
 	         * @param  {object} state 方法参数
 	         * @return {object} this
 	         * @example
-	         *      ent.Tabs(['new_name'], 'disabled').hide() //禁用并隐藏
+	         *      ent.Controls(['new_name'], 'disabled').hide() //禁用并隐藏
 	         */
 	
 	    }, {
@@ -1105,10 +1107,12 @@
 	        }
 	        /**
 	        * 获取实体name
+	        *```javascript
+	        * ent.name
+	        *
+	        *```
 	        * @property name
 	        * @type string
-	        * @example
-	        *       ent.name
 	        */
 	
 	    }, {
@@ -1118,10 +1122,12 @@
 	        }
 	        /**
 	        * 获取窗体类型
+	        *```javascript
+	        * ent.type
+	        *
+	        *```
 	        * @property type
 	        * @type string
-	        * @example
-	        *       ent.type
 	        */
 	
 	    }, {
@@ -1131,10 +1137,12 @@
 	        }
 	        /**
 	        * 获取登录人id
+	        *```javascript
+	        *ent.userid
+	        *
+	        *```
 	        * @property userid
 	        * @type guid
-	        * @example
-	        *       ent.userid
 	        */
 	
 	    }, {
@@ -1144,10 +1152,11 @@
 	        }
 	        /**
 	        * 获取登录人name
+	        *```javascript
+	        * ent.username
+	        *
 	        * @property username
 	        * @type string
-	        * @example
-	        *       ent.username
 	        */
 	
 	    }, {
@@ -1312,7 +1321,7 @@
 	  }, {
 	    key: "setDisplayState",
 	    value: function setDisplayState() {
-	      this.uiProcess.setDisplayState.apply(this.uiProcess, arguments);
+	      this.uiProcess && this.uiProcess.setDisplayState.apply(this.uiProcess, arguments);
 	    }
 	    /**
 	     * @method setVisible
@@ -1321,7 +1330,7 @@
 	  }, {
 	    key: "setVisible",
 	    value: function setVisible() {
-	      this.uiProcess.setVisible.apply(this.uiProcess, arguments);
+	      this.uiProcess && this.uiProcess.setVisible.apply(this.uiProcess, arguments);
 	    }
 	    /**
 	     * @method addOnStageChange
@@ -1330,7 +1339,7 @@
 	  }, {
 	    key: "addOnStageChange",
 	    value: function addOnStageChange() {
-	      this.dataProcess.addOnStageChange.apply(this.dataProcess, arguments);
+	      this.uiProcess && this.dataProcess.addOnStageChange.apply(this.dataProcess, arguments);
 	    }
 	    /**
 	     * @method addOnStageSelected
@@ -1339,7 +1348,7 @@
 	  }, {
 	    key: "addOnStageSelected",
 	    value: function addOnStageSelected() {
-	      this.dataProcess.addOnStageSelected.apply(this.dataProcess, arguments);
+	      this.uiProcess && this.dataProcess.addOnStageSelected.apply(this.dataProcess, arguments);
 	    }
 	    /**
 	     * @method getActivePath
@@ -1349,7 +1358,7 @@
 	  }, {
 	    key: "getActivePath",
 	    value: function getActivePath() {
-	      return this.dataProcess.getActivePath.apply(this.dataProcess, arguments);
+	      return this.uiProcess && this.dataProcess.getActivePath.apply(this.dataProcess, arguments);
 	    }
 	    /**
 	     * @method getActiveProcess
@@ -1359,7 +1368,7 @@
 	  }, {
 	    key: "getActiveProcess",
 	    value: function getActiveProcess() {
-	      return this.dataProcess.getActiveProcess.apply(this.dataProcess, arguments);
+	      return this.uiProcess && this.dataProcess.getActiveProcess.apply(this.dataProcess, arguments);
 	    }
 	    /**
 	     * @method getActiveStage
@@ -1369,7 +1378,7 @@
 	  }, {
 	    key: "getActiveStage",
 	    value: function getActiveStage() {
-	      return this.dataProcess.getActiveStage.apply(this.dataProcess, arguments);
+	      return this.uiProcess && this.dataProcess.getActiveStage.apply(this.dataProcess, arguments);
 	    }
 	    /**
 	     * @method getEnabledProcesses
@@ -1379,7 +1388,7 @@
 	  }, {
 	    key: "getEnabledProcesses",
 	    value: function getEnabledProcesses() {
-	      return this.dataProcess.getEnabledProcesses.apply(this.dataProcess, arguments);
+	      return this.uiProcess && this.dataProcess.getEnabledProcesses.apply(this.dataProcess, arguments);
 	    }
 	    /**
 	     * @method moveNext
@@ -1389,7 +1398,7 @@
 	  }, {
 	    key: "moveNext",
 	    value: function moveNext() {
-	      return this.dataProcess.moveNext.apply(this.dataProcess, arguments);
+	      return this.uiProcess && this.dataProcess.moveNext.apply(this.dataProcess, arguments);
 	    }
 	    /**
 	     * @method movePrevious
@@ -1399,7 +1408,7 @@
 	  }, {
 	    key: "movePrevious",
 	    value: function movePrevious() {
-	      return this.dataProcess.movePrevious.apply(this.dataProcess, arguments);
+	      return this.uiProcess && this.dataProcess.movePrevious.apply(this.dataProcess, arguments);
 	    }
 	    /**
 	     * @method removeOnStageChange
@@ -1409,7 +1418,7 @@
 	  }, {
 	    key: "removeOnStageChange",
 	    value: function removeOnStageChange() {
-	      this.dataProcess.removeOnStageChange.apply(this.dataProcess, arguments);
+	      this.uiProcess && this.dataProcess.removeOnStageChange.apply(this.dataProcess, arguments);
 	    }
 	    /**
 	     * @method removeOnStageSelected
@@ -1419,7 +1428,7 @@
 	  }, {
 	    key: "removeOnStageSelected",
 	    value: function removeOnStageSelected() {
-	      this.dataProcess.removeOnStageSelected.apply(this.dataProcess, arguments);
+	      this.uiProcess && this.dataProcess.removeOnStageSelected.apply(this.dataProcess, arguments);
 	    }
 	    /**
 	     * @method setActiveProcess
@@ -1428,7 +1437,7 @@
 	  }, {
 	    key: "setActiveProcess",
 	    value: function setActiveProcess() {
-	      return this.dataProcess.setActiveProcess.apply(this.dataProcess, arguments);
+	      return this.uiProcess && this.dataProcess.setActiveProcess.apply(this.dataProcess, arguments);
 	    }
 	    /**
 	     * @method setActiveStage
@@ -1437,7 +1446,7 @@
 	  }, {
 	    key: "setActiveStage",
 	    value: function setActiveStage() {
-	      return this.dataProcess.setActiveStage.apply(this.dataProcess, arguments);
+	      return this.uiProcess && this.dataProcess.setActiveStage.apply(this.dataProcess, arguments);
 	    }
 	  }]);
 

@@ -539,7 +539,7 @@ export class crmAttr {
      */
     isDirty() {
         if (this.attrname) {
-            this.attrname.getIsDirty();
+            return this.attrname.getIsDirty();
         }
         return true;
     }
@@ -556,58 +556,67 @@ export class crmEntity {
     }
     /**
     * 获取实体Id
+    *```javascript
+    * ent.id
+    *
+    *```
     * @property id
     * @type guid
-    * @example
-    *       ent.id //guid
     */
     get id() {
         return this.Xrm.Page.data.entity.getId();
     }
     /**
     * 获取实体name
+    *```javascript
+    * ent.name
+    *
+    *```
     * @property name
     * @type string
-    * @example
-    *       ent.name
     */
     get name() {
         return this.Xrm.Page.data.entity.getEntityName();
     }
     /**
     * 获取窗体类型
+    *```javascript
+    * ent.type
+    *
+    *```
     * @property type
     * @type string
-    * @example
-    *       ent.type
     */
     get type() {
         return this.Xrm.Page.ui.getFormType();
     }
     /**
     * 获取登录人id
+    *```javascript
+    *ent.userid
+    *
+    *```
     * @property userid
     * @type guid
-    * @example
-    *       ent.userid
     */
     get userid() {
         return this.Xrm.Page.context.getUserId();
     }
     /**
     * 获取登录人name
+    *```javascript
+    * ent.username
+    *
     * @property username
     * @type string
-    * @example
-    *       ent.username
     */
     get username() {
         return this.Xrm.Page.context.getUserName();
     }
     /**
     * 判断是否是当前登录人
-    * @property userid
-    * @type {boolean}
+    * @method isowner
+    * @return {boolean}
     * @example
     *       ent.isowner()
     */
@@ -777,7 +786,7 @@ export class crmEntity {
      * @param  {object} state 方法参数
      * @return {object} this
      * @example
-     *      ent.Tabs(['new_name'], 'disabled').hide() //禁用并隐藏
+     *      ent.Controls(['new_name'], 'disabled').hide() //禁用并隐藏
      */
     Controls(controls, handle, state) {
         var returnArr = [];

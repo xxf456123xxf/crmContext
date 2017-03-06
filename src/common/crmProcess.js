@@ -24,92 +24,92 @@ export class crmProcess {
      * @method setDisplayState
      */
     setDisplayState() {
-        this.uiProcess.setDisplayState.apply(this.uiProcess, arguments);
+        this.uiProcess && this.uiProcess.setDisplayState.apply(this.uiProcess, arguments);
     }
     /**
      * @method setVisible
      */
     setVisible() {
-        this.uiProcess.setVisible.apply(this.uiProcess, arguments);
+        this.uiProcess && this.uiProcess.setVisible.apply(this.uiProcess, arguments);
     }
     /**
      * @method addOnStageChange
      */
     addOnStageChange() {
-        this.dataProcess.addOnStageChange.apply(this.dataProcess, arguments);
+        this.uiProcess && this.dataProcess.addOnStageChange.apply(this.dataProcess, arguments);
     }
     /**
      * @method addOnStageSelected
      */
     addOnStageSelected() {
-        this.dataProcess.addOnStageSelected.apply(this.dataProcess, arguments);
+        this.uiProcess && this.dataProcess.addOnStageSelected.apply(this.dataProcess, arguments);
     }
     /**
      * @method getActivePath
      * @return {[type]}
      */
     getActivePath() {
-        return this.dataProcess.getActivePath.apply(this.dataProcess, arguments);
+        return this.uiProcess && this.dataProcess.getActivePath.apply(this.dataProcess, arguments);
     }
     /**
      * @method getActiveProcess
      * @return {[type]}
      */
     getActiveProcess() {
-        return this.dataProcess.getActiveProcess.apply(this.dataProcess, arguments);
+        return this.uiProcess && this.dataProcess.getActiveProcess.apply(this.dataProcess, arguments);
     }
     /**
      * @method getActiveStage
      * @return {[type]}
      */
     getActiveStage() {
-        return this.dataProcess.getActiveStage.apply(this.dataProcess, arguments);
+        return this.uiProcess && this.dataProcess.getActiveStage.apply(this.dataProcess, arguments);
     }
     /**
      * @method getEnabledProcesses
      * @return {[type]}
      */
     getEnabledProcesses() {
-        return this.dataProcess.getEnabledProcesses.apply(this.dataProcess, arguments);
+        return this.uiProcess && this.dataProcess.getEnabledProcesses.apply(this.dataProcess, arguments);
     }
     /**
      * @method moveNext
      * @return {[type]}
      */
     moveNext() {
-        return this.dataProcess.moveNext.apply(this.dataProcess, arguments);
+        return this.uiProcess && this.dataProcess.moveNext.apply(this.dataProcess, arguments);
     }
     /**
      * @method movePrevious
      * @return {[type]}
      */
     movePrevious() {
-        return this.dataProcess.movePrevious.apply(this.dataProcess, arguments);
+        return this.uiProcess && this.dataProcess.movePrevious.apply(this.dataProcess, arguments);
     }
     /**
      * @method removeOnStageChange
      * @return {[type]}
      */
     removeOnStageChange() {
-        this.dataProcess.removeOnStageChange.apply(this.dataProcess, arguments);
+        this.uiProcess && this.dataProcess.removeOnStageChange.apply(this.dataProcess, arguments);
     }
     /**
      * @method removeOnStageSelected
      * @return {[type]}
      */
     removeOnStageSelected() {
-        this.dataProcess.removeOnStageSelected.apply(this.dataProcess, arguments);
+        this.uiProcess && this.dataProcess.removeOnStageSelected.apply(this.dataProcess, arguments);
     }
     /**
      * @method setActiveProcess
      */
     setActiveProcess() {
-        return this.dataProcess.setActiveProcess.apply(this.dataProcess, arguments);
+        return this.uiProcess && this.dataProcess.setActiveProcess.apply(this.dataProcess, arguments);
     }
     /**
      * @method setActiveStage
      */
     setActiveStage() {
-        return this.dataProcess.setActiveStage.apply(this.dataProcess, arguments);
+        return this.uiProcess && this.dataProcess.setActiveStage.apply(this.dataProcess, arguments);
     }
 }
