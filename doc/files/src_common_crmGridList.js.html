@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>src\common\crmGridList.js - crmContent</title>
+  
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+</head>
+<body class="yui3-smart">
+ <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+               <a class="navbar-brand mainlogo" href="#">
+             
+            <img alt="crmContent" src="..\favicon.png" title="crmContent">
+            
+                crmContent
+          </a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                 <ul class="nav navbar-nav">
+                    
+                    <li><a href="http://www.css88.com/doc/underscore/">underscore</a>
+                    </li>
+                    
+                </ul>
+               <div class="navbar-form navbar-right filterAPi" autocomplete="off">
+                <input type="text" id='txtSearchAPI' class="form-control search-query" placeholder="Search for API" />
+                 <ul id="filterList" class="filterItems dropdown-menu" role="menu"></ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div id="sidebar">
+    <h3>Modules/Classes</h3>
+        <div id="api-tabview-filter">
+            <input id='txtSearch' type="search" class="form-control" placeholder="Type to filter Modules/Classes">
+        </div>
+        <dl id="sidebar_list">
+             
+                <dt>
+                    <span class="glyphicon glyphicon-minus"></span>
+                    <a href="../modules/crmContext.html">crmContext</a>
+                </dt>
+                <dd>
+                    <ul>
+                   
+                       <li>
+                            
+                           <a href="../classes/crmContext.html">crmContext</a>
+                           <ul>
+                                
+                           </ul>
+                       </li>
+                    
+                    </ul>
+                </dd>
+             
+                <dt>
+                    <span class="glyphicon glyphicon-minus"></span>
+                    <a href="../modules/crmGridList.html">crmGridList</a>
+                </dt>
+                <dd>
+                    <ul>
+                   
+                       <li>
+                            
+                           <a href="../classes/crmGridList.html">crmGridList</a>
+                           <ul>
+                                
+                           </ul>
+                       </li>
+                    
+                    </ul>
+                </dd>
+             
+                <dt>
+                    <span class="glyphicon glyphicon-minus"></span>
+                    <a href="../modules/crmProcess.html">crmProcess</a>
+                </dt>
+                <dd>
+                    <ul>
+                   
+                       <li>
+                            
+                           <a href="../classes/crmProcess.html">crmProcess</a>
+                           <ul>
+                                
+                           </ul>
+                       </li>
+                    
+                    </ul>
+                </dd>
+             
+                <dt>
+                    <span class="glyphicon glyphicon-minus"></span>
+                    <a href="../modules/Entity.html">Entity</a>
+                </dt>
+                <dd>
+                    <ul>
+                   
+                       <li>
+                            
+                           <a href="../classes/crmAttr.html">crmAttr</a>
+                           <ul>
+                                
+                           </ul>
+                       </li>
+                    
+                       <li>
+                            
+                           <a href="../classes/crmEntity.html">crmEntity</a>
+                           <ul>
+                                
+                           </ul>
+                       </li>
+                    
+                       <li>
+                            
+                           <a href="../classes/crmEntityOption.html">crmEntityOption</a>
+                           <ul>
+                                
+                           </ul>
+                       </li>
+                    
+                    </ul>
+                </dd>
+             
+        </dl>
+</div>
+   
+    <div class="stdoc-content">
+        <!--     <form id="options-form" class="form-inline pull-right">
+        Show:
+        <label for="api-show-inherited" class="checkbox">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected" class="checkbox">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private" class="checkbox">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated" class="checkbox">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </form>
+
+ -->
+        <div class="apidocs">
+            <div id="docs-main">
+                <div class="content">
+                    <div class="page-header">
+    <h1>src\common\crmGridList.js <small>File</small></h1>
+</div>
+
+<div class="file">
+    <pre class="prettyprint linenums" id='src_code'>
+/**
+ * 子网格操作
+ * @module crmGridList
+ */
+export class crmGridList {
+    /**
+     *crmGridList 初始化对象
+     * @class crmGridList
+     * @constructor
+    */
+    constructor(Sys, Xrm, name) {
+        this.Xrm = Xrm;
+        this.name = name;
+        var Control = this.Xrm.Page.getControl(name);
+        var TurboGrid = Control.getGrid();
+        if (TurboGrid[&#x27;$3_1&#x27;]) {
+           //2016处理方式和d365
+            this.contname = TurboGrid[&#x27;$3_1&#x27;]
+        }
+        //this.contname = Sys.Application._components[name];
+        if(!this.contname) {
+            this.logWarn(&#x60;not crmGridList name : ${this.contname}&#x60;)
+        }
+    }
+    /**
+     * list
+     * @property list
+     * @type array
+     */
+    get list() {
+        if(!this.contname) {
+            return [];
+        }
+        return this.contname.get_allRecords()
+    }
+    /**
+     * listIds
+     * @property listIds
+     * @type array
+     */
+    get listIds() {
+        if(!this.contname) {
+            return [];
+        }
+        return this.contname.get_allRecordIds()
+    }
+    /**
+     * count
+     * @property count
+     * @type int
+     */
+    get count() {
+        if(!this.contname) {
+            return 0;
+        }
+        return this.contname.get_allRecords().length;
+    }
+    /**
+     * getSelectIds
+     * @property getSelectIds
+     * @type array
+     */
+    getSelectIds() {
+        if(!this.contname) {
+            return [];
+        }
+        return this.contname.get_selectedIds()
+    }
+   /**
+    * 子网格搜索筛选
+    * @method addFilter
+    * @param  {[type]}  handle     [description]
+    * @param  {[type]}  entityType [description]
+    */
+    addFilter(handle, entityType) {
+        var TurboGrid = this.contname;
+        var CustomerHandler = null;
+        if(typeof TurboGrid.addButtonClickHandler === &#x27;function&#x27;) {
+            CustomerHandler = TurboGrid.addButtonClickHandler.bind(TurboGrid);
+            TurboGrid.addButtonClickHandler = () =&gt; {
+                CustomerHandler();
+                var lookup= this.Xrm.Page.getControl(&#x27;lookup_&#x27; + this.name);
+                lookup.addPreSearch(function() {
+                    var FilterXml = handle.apply(this);
+                    lookup.addCustomFilter(FilterXml, entityType);
+                })
+                TurboGrid.addButtonClickHandler = CustomerHandler;
+            }
+        }
+    }
+    /**
+     * 自定义子网格
+     * @method setParameter
+     * @param  {[type]}     fetchxml [description]
+     */
+    setParameter(fetchxml) {
+        var TurboGrid = this.contname;
+        if(typeof TurboGrid.SetParameter === &#x27;function&#x27;) {
+            TurboGrid.SetParameter(&#x27;fetchxml&#x27;, fetchxml);
+        }
+        TurboGrid.refresh();
+    }
+    logWarn(message) {
+        window.console &amp;&amp; typeof window.console.warn === &#x27;function&#x27; &amp;&amp; window.console.warn(message);
+    }
+    logError(message) {
+        window.console &amp;&amp; typeof window.console.error === &#x27;function&#x27; &amp;&amp; window.console.error(message);
+    }
+}
+    </pre>
+</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+<a id="gotoTop" class='well well-small' href='#'>
+    Top
+</a>
+<script src="../assets/vendor/jquery/jquery-1.8.2.min.js"></script>
+<script src="../assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/doc.js"></script>
+</body>
+</html>

@@ -1,0 +1,1463 @@
+{
+    "project": {
+        "name": "crmContent",
+        "description": "<h2>crmContent</h2> <p>crmContent</p>",
+        "version": "1.0.0",
+        "url": "#",
+        "logo": "favicon.png",
+        "navs": [
+            {
+                "name": "underscore",
+                "url": "http://www.css88.com/doc/underscore/"
+            }
+        ]
+    },
+    "files": {
+        "src\\common\\crmEntity.js": {
+            "name": "src\\common\\crmEntity.js",
+            "modules": {
+                "Entity": 1
+            },
+            "classes": {
+                "crmAttr": 1,
+                "crmEntity": 1,
+                "crmEntityOption": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\common\\crmGridList.js": {
+            "name": "src\\common\\crmGridList.js",
+            "modules": {
+                "crmGridList": 1
+            },
+            "classes": {
+                "crmGridList": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\common\\crmProcess.js": {
+            "name": "src\\common\\crmProcess.js",
+            "modules": {
+                "crmProcess": 1
+            },
+            "classes": {
+                "crmProcess": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\crmApp.js": {
+            "name": "src\\crmApp.js",
+            "modules": {
+                "crmContext": 1
+            },
+            "classes": {
+                "crmContext": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "Entity": {
+            "name": "Entity",
+            "submodules": {},
+            "classes": {
+                "crmAttr": 1,
+                "crmEntity": 1,
+                "crmEntityOption": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "src\\common\\crmEntity.js",
+            "line": 864,
+            "description": "表单操作"
+        },
+        "crmGridList": {
+            "name": "crmGridList",
+            "submodules": {},
+            "classes": {
+                "crmGridList": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "src\\common\\crmGridList.js",
+            "line": 6,
+            "description": "子网格操作"
+        },
+        "crmProcess": {
+            "name": "crmProcess",
+            "submodules": {},
+            "classes": {
+                "crmProcess": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "src\\common\\crmProcess.js",
+            "line": 6,
+            "description": "业务流程操作"
+        },
+        "crmContext": {
+            "name": "crmContext",
+            "submodules": {},
+            "classes": {
+                "crmContext": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "src\\crmApp.js",
+            "line": 9,
+            "description": "crmContext操作"
+        }
+    },
+    "classes": {
+        "crmAttr": {
+            "name": "crmAttr",
+            "shortname": "crmAttr",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Entity",
+            "namespace": "",
+            "file": "src\\common\\crmEntity.js",
+            "line": 6,
+            "description": "crmAttr 初始化对象",
+            "params": [
+                {
+                    "name": "Xrm",
+                    "description": "",
+                    "type": "Object",
+                    "optional": true
+                },
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "Object",
+                    "optional": true
+                }
+            ],
+            "is_constructor": 1
+        },
+        "crmEntity": {
+            "name": "crmEntity",
+            "shortname": "crmEntity",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Entity",
+            "namespace": "",
+            "file": "src\\common\\crmEntity.js",
+            "line": 548,
+            "description": "crmEntity 初始化对象",
+            "is_constructor": 1
+        },
+        "crmEntityOption": {
+            "name": "crmEntityOption",
+            "shortname": "crmEntityOption",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Entity",
+            "namespace": "",
+            "file": "src\\common\\crmEntity.js",
+            "line": 864,
+            "description": "crmEntityOption 初始化对象(通过crmAttr/getOpts获取)",
+            "is_constructor": 1
+        },
+        "crmGridList": {
+            "name": "crmGridList",
+            "shortname": "crmGridList",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "crmGridList",
+            "namespace": "",
+            "file": "src\\common\\crmGridList.js",
+            "line": 6,
+            "description": "crmGridList 初始化对象",
+            "is_constructor": 1
+        },
+        "crmProcess": {
+            "name": "crmProcess",
+            "shortname": "crmProcess",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "crmProcess",
+            "namespace": "",
+            "file": "src\\common\\crmProcess.js",
+            "line": 6,
+            "description": "crmProcess 初始化对象",
+            "is_constructor": 1
+        },
+        "crmContext": {
+            "name": "crmContext",
+            "shortname": "crmContext",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "crmContext",
+            "namespace": "",
+            "file": "src\\crmApp.js",
+            "line": 9,
+            "description": "crmContext 初始化对象\n ```javascript\nvar newCrmContext = new crmContext(window.Xrm, { Sys: window.Sys});\nvar attr = newCrmContext.attr.bind(newCrmContext);\nvar entity = newCrmContext.entity;\nvar process = newCrmContext.process;\nvar crmGridList = newCrmContext.crmGridList.bind(newCrmContext);\n\n ```",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "Xrm",
+                    "description": "",
+                    "type": "Object",
+                    "optional": true
+                },
+                {
+                    "name": "pars",
+                    "description": "{Sys}",
+                    "type": "Object",
+                    "optional": true
+                }
+            ]
+        }
+    },
+    "classitems": [
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 13,
+            "description": "getAttribute对象",
+            "itemtype": "property",
+            "name": "attrname",
+            "type": "object",
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 18,
+            "description": "getControl对象",
+            "itemtype": "property",
+            "name": "contname",
+            "type": "object",
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 39,
+            "description": "获取字段值",
+            "itemtype": "method",
+            "name": "getValue",
+            "return": {
+                "description": "value",
+                "type": "Object"
+            },
+            "example": [
+                "\n    attr('new_name').getValue();"
+            ],
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 53,
+            "description": "获取字段值 Lookup返回第一个值",
+            "itemtype": "method",
+            "name": "get",
+            "return": {
+                "description": "value",
+                "type": "Object"
+            },
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 68,
+            "description": "设置和获取值",
+            "itemtype": "method",
+            "name": "val",
+            "params": [
+                {
+                    "name": "val",
+                    "description": "设置值",
+                    "type": "Object"
+                }
+            ],
+            "optional": 1,
+            "return": {
+                "description": "this 获取值",
+                "type": "Object"
+            },
+            "example": [
+                "\n     attr('new_name').val() //获取值\n     attr('new_name').val('名称') //设置值并设置成始终提交 不触发chagne事件"
+            ],
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 92,
+            "description": "显示字段",
+            "itemtype": "method",
+            "name": "show",
+            "return": {
+                "description": "this",
+                "type": "Object"
+            },
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 103,
+            "description": "隐藏字段",
+            "itemtype": "method",
+            "name": "hide",
+            "return": {
+                "description": "this",
+                "type": "Object"
+            },
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 114,
+            "description": "获取属性name|text值",
+            "itemtype": "method",
+            "name": "text",
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "example": [
+                "\n     attr('ownerid').text() //owneridname"
+            ],
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 134,
+            "description": "禁用",
+            "itemtype": "method",
+            "name": "disabled",
+            "params": [
+                {
+                    "name": "state",
+                    "description": "0=启用，1=禁用",
+                    "type": "Int",
+                    "optional": true,
+                    "optdefault": "1"
+                }
+            ],
+            "required": 1,
+            "return": {
+                "description": "this",
+                "type": "Object"
+            },
+            "example": [
+                "\n     attr('new_name').disabled() //禁用\n     attr('new_name').disabled(0) //启用"
+            ],
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 154,
+            "description": "绑定或触发change事件",
+            "itemtype": "method",
+            "name": "change",
+            "params": [
+                {
+                    "name": "change",
+                    "description": "触发事件",
+                    "type": "Function"
+                },
+                {
+                    "name": "isChange",
+                    "description": "为1时触发",
+                    "type": "Int"
+                }
+            ],
+            "return": {
+                "description": "this",
+                "type": "Object"
+            },
+            "example": [
+                "\n     attr('new_name').change() //触发change事件\n     attr('new_name').change(this.nameChange) //绑定change事件\n     attr('new_name').change(this.nameChange, 1) //绑定change事件并触发"
+            ],
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 178,
+            "description": "移除change事件",
+            "itemtype": "method",
+            "name": "removechange",
+            "params": [
+                {
+                    "name": "change",
+                    "description": "",
+                    "type": "Change"
+                }
+            ],
+            "return": {
+                "description": "this",
+                "type": "Object"
+            },
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 190,
+            "description": "字段必填",
+            "itemtype": "method",
+            "name": "required",
+            "params": [
+                {
+                    "name": "a",
+                    "description": "0=none,1=required",
+                    "type": "Int"
+                }
+            ],
+            "return": {
+                "description": "this",
+                "type": "Object"
+            },
+            "example": [
+                "\n     attr('new_name').required() //必填\n     attr('new_name').required(0) //不必填"
+            ],
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 205,
+            "description": "提交模式",
+            "itemtype": "method",
+            "name": "mode",
+            "params": [
+                {
+                    "name": "modetype",
+                    "description": "1=always,0=never",
+                    "type": "Int"
+                }
+            ],
+            "return": {
+                "description": "this",
+                "type": "Object"
+            },
+            "example": [
+                "\n     attr('new_name').mode() //始终提交字段值\n     attr('new_name').mode(0) //不提交字段值"
+            ],
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 231,
+            "description": "窗体创建时设置默认值",
+            "itemtype": "method",
+            "name": "default",
+            "params": [
+                {
+                    "name": "val",
+                    "description": "值",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "this",
+                "type": "Object"
+            },
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 243,
+            "description": "Lookup字段设置当前登录人",
+            "itemtype": "method",
+            "name": "user",
+            "return": {
+                "description": "this",
+                "type": "Object"
+            },
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 258,
+            "description": "设置lookup 值",
+            "itemtype": "method",
+            "name": "setLookup",
+            "params": [
+                {
+                    "name": "entityType",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "id",
+                    "description": "",
+                    "type": "Guid"
+                },
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "[this]",
+                "type": "Object"
+            },
+            "example": [
+                "\n     attr('ownerid').setLookup('systemuser','guid','管理员') //设置查找字段值"
+            ],
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 278,
+            "description": "清除字段值",
+            "itemtype": "method",
+            "name": "clear",
+            "return": {
+                "description": "this",
+                "type": "Object"
+            },
+            "example": [
+                "\n     attr('new_name').clear() //清除字段值"
+            ],
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 291,
+            "description": "设置焦点",
+            "itemtype": "method",
+            "name": "focus",
+            "return": {
+                "description": "this",
+                "type": "Object"
+            },
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 302,
+            "description": "判断窗体类型",
+            "itemtype": "method",
+            "name": "type",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "窗体类型",
+                    "type": "Int"
+                }
+            ],
+            "return": {
+                "description": "this",
+                "type": "Object"
+            },
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 315,
+            "description": "保存实体",
+            "itemtype": "method",
+            "name": "save",
+            "return": {
+                "description": "保存后的事件",
+                "type": "Object"
+            },
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 323,
+            "itemtype": "method",
+            "name": "option",
+            "params": [
+                {
+                    "name": "arr",
+                    "description": "",
+                    "type": "Array"
+                },
+                {
+                    "name": "handle",
+                    "description": "attr方法名",
+                    "type": "String"
+                },
+                {
+                    "name": "state",
+                    "description": "值",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "example": [
+                "\n     attr('new_name').option({ 'tab1': '100000000', 'tab2': '100000000', 'tab3': '100000001' }, 'hide').show() //new_name值为100000000时显示tab1、tab2，为100000001显示tab3"
+            ],
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 346,
+            "description": "查找字段带值",
+            "itemtype": "method",
+            "name": "setByVal",
+            "params": [
+                {
+                    "name": "columns",
+                    "description": "表单字段列",
+                    "type": "Array"
+                },
+                {
+                    "name": "columns1",
+                    "description": "查找字段列",
+                    "type": "Array"
+                },
+                {
+                    "name": "lookupById",
+                    "description": "查询方法",
+                    "type": "Function"
+                }
+            ],
+            "example": [
+                "\n     attr('new_productid').setByVal(['new_productname',['ownerid$empty']], ['new_name','ownerid'], request.lookupById) //产品查找产品名称赋值、ownerid为null时不赋值,会触发change事件"
+            ],
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 382,
+            "description": "添加自定义视图",
+            "itemtype": "method",
+            "name": "addCustomView",
+            "params": [
+                {
+                    "name": "viewDisplayName",
+                    "description": "视图名称",
+                    "type": "String"
+                },
+                {
+                    "name": "fetchXml",
+                    "description": "fetchXML字符串",
+                    "type": "String"
+                },
+                {
+                    "name": "columns",
+                    "description": "显示的列",
+                    "type": "Array"
+                }
+            ],
+            "example": [
+                "\n     attr('new_productid').addCustomView('可选产品', fetchXml,['new_name']) //添加自定义视图"
+            ],
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 401,
+            "description": "添加自定义查询条件",
+            "itemtype": "method",
+            "name": "addFilter",
+            "params": [
+                {
+                    "name": "handle",
+                    "description": "返回filterXML",
+                    "type": "Function"
+                },
+                {
+                    "name": "entityType",
+                    "description": "可不传",
+                    "type": "String"
+                }
+            ],
+            "example": [
+                "\n      productCustomFilter = function() {\n           return '<filter type=\\'and\\'><condition attribute=\\'new_name\\' operator=\\'like\\' value=\\'%产品%\\' /></filter>';\n      }\n      attr('new_productid').addFilter(productCustomFilter) //产品视图添加filter条件\n"
+            ],
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 482,
+            "description": "刷新字段值",
+            "itemtype": "method",
+            "name": "refresh",
+            "return": {
+                "description": "this",
+                "type": "Object"
+            },
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 493,
+            "description": "数字字段设置最大值",
+            "itemtype": "method",
+            "name": "setMax",
+            "params": [
+                {
+                    "name": "value",
+                    "description": "值",
+                    "type": "Int"
+                }
+            ],
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 507,
+            "description": "数字字段设置最小值",
+            "itemtype": "method",
+            "name": "setMin",
+            "params": [
+                {
+                    "name": "value",
+                    "description": "值",
+                    "type": "Int"
+                }
+            ],
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 522,
+            "description": "获取crmEntityOption对象",
+            "itemtype": "method",
+            "name": "getOpts",
+            "return": {
+                "description": "返回下拉值操作对象",
+                "type": "Object"
+            },
+            "example": [
+                "\n     var types = attr('new_type').getOpts()\n     types.optVal([100000000]) //只显示下拉值100000000\n     types.optVal([100000001]) //只显示下拉值100000001\n     types.remove([100000001]) //移除下拉值100000001"
+            ],
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 535,
+            "description": "字段是否编辑",
+            "itemtype": "method",
+            "name": "isDirty",
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "crmAttr",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 557,
+            "description": "获取实体Id\n```javascript\nent.id\n\n```",
+            "itemtype": "property",
+            "name": "id",
+            "type": "guid",
+            "class": "crmEntity",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 569,
+            "description": "获取实体name\n```javascript\nent.name\n\n```",
+            "itemtype": "property",
+            "name": "name",
+            "type": "string",
+            "class": "crmEntity",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 581,
+            "description": "获取窗体类型\n```javascript\nent.type\n\n```",
+            "itemtype": "property",
+            "name": "type",
+            "type": "string",
+            "class": "crmEntity",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 593,
+            "description": "获取登录人id\n```javascript\nent.userid\n\n```",
+            "itemtype": "property",
+            "name": "userid",
+            "type": "guid",
+            "class": "crmEntity",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 605,
+            "description": "获取登录人name\n```javascript\nent.username",
+            "itemtype": "property",
+            "name": "username",
+            "type": "string",
+            "class": "crmEntity",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 616,
+            "description": "判断是否是当前登录人",
+            "itemtype": "method",
+            "name": "isowner",
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "example": [
+                "\n      ent.isowner()"
+            ],
+            "class": "crmEntity",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 626,
+            "description": "判断是否是手机端",
+            "itemtype": "method",
+            "name": "isMobile",
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "example": [
+                "\n      ent.isMobile()"
+            ],
+            "class": "crmEntity",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 636,
+            "description": "保存",
+            "itemtype": "method",
+            "name": "save",
+            "return": {
+                "description": "保存成功后事件",
+                "type": "Object"
+            },
+            "example": [
+                "\n     ent.save().then(function() {\n         //保存之后执行\n     })"
+            ],
+            "class": "crmEntity",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 652,
+            "description": "刷新Ribbon",
+            "itemtype": "method",
+            "name": "refRibbon",
+            "class": "crmEntity",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 659,
+            "description": "刷新实体或刷新列表",
+            "itemtype": "method",
+            "name": "refresh",
+            "class": "crmEntity",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 670,
+            "description": "重新加载实体",
+            "itemtype": "method",
+            "name": "reload",
+            "class": "crmEntity",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 679,
+            "description": "禁用或启用窗体所有字段",
+            "itemtype": "method",
+            "name": "disabledAll",
+            "params": [
+                {
+                    "name": "state",
+                    "description": "0=启用,1=禁用",
+                    "type": "Int",
+                    "optional": true,
+                    "optdefault": "1"
+                }
+            ],
+            "return": {
+                "description": "this",
+                "type": "Object"
+            },
+            "class": "crmEntity",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 688,
+            "description": "禁用或启用窗体部分字段",
+            "itemtype": "method",
+            "name": "disabled",
+            "params": [
+                {
+                    "name": "arr",
+                    "description": "Tab\\Sections\\Controls",
+                    "type": "Array"
+                },
+                {
+                    "name": "{state=1}",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "this",
+                "type": "Object"
+            },
+            "class": "crmEntity",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 698,
+            "description": "显示窗体部分字段",
+            "itemtype": "method",
+            "name": "show",
+            "params": [
+                {
+                    "name": "arr",
+                    "description": "Tab\\Sections\\Controls",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "this",
+                "type": "Object"
+            },
+            "class": "crmEntity",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 707,
+            "description": "隐藏窗体部分字段",
+            "itemtype": "method",
+            "name": "hide",
+            "params": [
+                {
+                    "name": "arr",
+                    "description": "Tab\\Sections\\Controls",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "this",
+                "type": "Object"
+            },
+            "class": "crmEntity",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 716,
+            "description": "验证窗体必填字段",
+            "itemtype": "method",
+            "name": "isValid",
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "crmEntity",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 724,
+            "description": "设置窗体字段value值",
+            "itemtype": "method",
+            "name": "val",
+            "params": [
+                {
+                    "name": "arr",
+                    "description": "Controls",
+                    "type": "Array"
+                },
+                {
+                    "name": "value",
+                    "description": "值",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "this",
+                "type": "Object"
+            },
+            "class": "crmEntity",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 735,
+            "description": "Tabs控制",
+            "itemtype": "method",
+            "name": "Tabs",
+            "params": [
+                {
+                    "name": "arr",
+                    "description": "Tab\\Sections\\Controls",
+                    "type": "Array"
+                },
+                {
+                    "name": "handle",
+                    "description": "crmAttr方法名",
+                    "type": "String"
+                },
+                {
+                    "name": "state",
+                    "description": "方法参数",
+                    "type": "Object"
+                }
+            ],
+            "example": [
+                "\n     ent.Tabs(['tab1','tab1_section_1','new_name'], 'disabled').hide() //禁用并隐藏"
+            ],
+            "class": "crmEntity",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 764,
+            "description": "Sections控制",
+            "itemtype": "method",
+            "name": "Sections",
+            "params": [
+                {
+                    "name": "arr",
+                    "description": "Sections\\Controls",
+                    "type": "Array"
+                },
+                {
+                    "name": "handle",
+                    "description": "crmAttr方法名",
+                    "type": "String"
+                },
+                {
+                    "name": "state",
+                    "description": "方法参数",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "this",
+                "type": "Object"
+            },
+            "example": [
+                "\n     ent.Tabs(['tab1_section_1','new_name'], 'disabled').hide() //禁用并隐藏"
+            ],
+            "class": "crmEntity",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 795,
+            "description": "Controls控制",
+            "itemtype": "method",
+            "name": "Controls",
+            "params": [
+                {
+                    "name": "arr",
+                    "description": "Controls",
+                    "type": "Array"
+                },
+                {
+                    "name": "handle",
+                    "description": "crmAttr方法名",
+                    "type": "String"
+                },
+                {
+                    "name": "state",
+                    "description": "方法参数",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "this",
+                "type": "Object"
+            },
+            "example": [
+                "\n     ent.Controls(['new_name'], 'disabled').hide() //禁用并隐藏"
+            ],
+            "class": "crmEntity",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 874,
+            "description": "设置下拉值",
+            "itemtype": "method",
+            "name": "optVal",
+            "params": [
+                {
+                    "name": "arr",
+                    "description": "下拉值",
+                    "type": "Array"
+                }
+            ],
+            "class": "crmEntityOption",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmEntity.js",
+            "line": 891,
+            "description": "移除下拉值",
+            "itemtype": "method",
+            "name": "remove",
+            "params": [
+                {
+                    "name": "arr",
+                    "description": "下拉值",
+                    "type": "Array"
+                }
+            ],
+            "class": "crmEntityOption",
+            "module": "Entity"
+        },
+        {
+            "file": "src\\common\\crmGridList.js",
+            "line": 25,
+            "description": "list",
+            "itemtype": "property",
+            "name": "list",
+            "type": "array",
+            "class": "crmGridList",
+            "module": "crmGridList"
+        },
+        {
+            "file": "src\\common\\crmGridList.js",
+            "line": 36,
+            "description": "listIds",
+            "itemtype": "property",
+            "name": "listIds",
+            "type": "array",
+            "class": "crmGridList",
+            "module": "crmGridList"
+        },
+        {
+            "file": "src\\common\\crmGridList.js",
+            "line": 47,
+            "description": "count",
+            "itemtype": "property",
+            "name": "count",
+            "type": "int",
+            "class": "crmGridList",
+            "module": "crmGridList"
+        },
+        {
+            "file": "src\\common\\crmGridList.js",
+            "line": 58,
+            "description": "getSelectIds",
+            "itemtype": "property",
+            "name": "getSelectIds",
+            "type": "array",
+            "class": "crmGridList",
+            "module": "crmGridList"
+        },
+        {
+            "file": "src\\common\\crmGridList.js",
+            "line": 69,
+            "description": "子网格搜索筛选",
+            "itemtype": "method",
+            "name": "addFilter",
+            "params": [
+                {
+                    "name": "handle",
+                    "description": "[description]",
+                    "type": "[type]"
+                },
+                {
+                    "name": "entityType",
+                    "description": "[description]",
+                    "type": "[type]"
+                }
+            ],
+            "class": "crmGridList",
+            "module": "crmGridList"
+        },
+        {
+            "file": "src\\common\\crmGridList.js",
+            "line": 91,
+            "description": "自定义子网格",
+            "itemtype": "method",
+            "name": "setParameter",
+            "params": [
+                {
+                    "name": "fetchxml",
+                    "description": "[description]",
+                    "type": "[type]"
+                }
+            ],
+            "class": "crmGridList",
+            "module": "crmGridList"
+        },
+        {
+            "file": "src\\common\\crmProcess.js",
+            "line": 16,
+            "itemtype": "method",
+            "name": "reflow",
+            "return": {
+                "description": "",
+                "type": "[type]"
+            },
+            "class": "crmProcess",
+            "module": "crmProcess"
+        },
+        {
+            "file": "src\\common\\crmProcess.js",
+            "line": 23,
+            "itemtype": "method",
+            "name": "setDisplayState",
+            "class": "crmProcess",
+            "module": "crmProcess"
+        },
+        {
+            "file": "src\\common\\crmProcess.js",
+            "line": 29,
+            "itemtype": "method",
+            "name": "setVisible",
+            "class": "crmProcess",
+            "module": "crmProcess"
+        },
+        {
+            "file": "src\\common\\crmProcess.js",
+            "line": 35,
+            "itemtype": "method",
+            "name": "addOnStageChange",
+            "class": "crmProcess",
+            "module": "crmProcess"
+        },
+        {
+            "file": "src\\common\\crmProcess.js",
+            "line": 41,
+            "itemtype": "method",
+            "name": "addOnStageSelected",
+            "class": "crmProcess",
+            "module": "crmProcess"
+        },
+        {
+            "file": "src\\common\\crmProcess.js",
+            "line": 47,
+            "itemtype": "method",
+            "name": "getActivePath",
+            "return": {
+                "description": "",
+                "type": "[type]"
+            },
+            "class": "crmProcess",
+            "module": "crmProcess"
+        },
+        {
+            "file": "src\\common\\crmProcess.js",
+            "line": 54,
+            "itemtype": "method",
+            "name": "getActiveProcess",
+            "return": {
+                "description": "",
+                "type": "[type]"
+            },
+            "class": "crmProcess",
+            "module": "crmProcess"
+        },
+        {
+            "file": "src\\common\\crmProcess.js",
+            "line": 61,
+            "itemtype": "method",
+            "name": "getActiveStage",
+            "return": {
+                "description": "",
+                "type": "[type]"
+            },
+            "class": "crmProcess",
+            "module": "crmProcess"
+        },
+        {
+            "file": "src\\common\\crmProcess.js",
+            "line": 68,
+            "itemtype": "method",
+            "name": "getEnabledProcesses",
+            "return": {
+                "description": "",
+                "type": "[type]"
+            },
+            "class": "crmProcess",
+            "module": "crmProcess"
+        },
+        {
+            "file": "src\\common\\crmProcess.js",
+            "line": 75,
+            "itemtype": "method",
+            "name": "moveNext",
+            "return": {
+                "description": "",
+                "type": "[type]"
+            },
+            "class": "crmProcess",
+            "module": "crmProcess"
+        },
+        {
+            "file": "src\\common\\crmProcess.js",
+            "line": 82,
+            "itemtype": "method",
+            "name": "movePrevious",
+            "return": {
+                "description": "",
+                "type": "[type]"
+            },
+            "class": "crmProcess",
+            "module": "crmProcess"
+        },
+        {
+            "file": "src\\common\\crmProcess.js",
+            "line": 89,
+            "itemtype": "method",
+            "name": "removeOnStageChange",
+            "return": {
+                "description": "",
+                "type": "[type]"
+            },
+            "class": "crmProcess",
+            "module": "crmProcess"
+        },
+        {
+            "file": "src\\common\\crmProcess.js",
+            "line": 96,
+            "itemtype": "method",
+            "name": "removeOnStageSelected",
+            "return": {
+                "description": "",
+                "type": "[type]"
+            },
+            "class": "crmProcess",
+            "module": "crmProcess"
+        },
+        {
+            "file": "src\\common\\crmProcess.js",
+            "line": 103,
+            "itemtype": "method",
+            "name": "setActiveProcess",
+            "class": "crmProcess",
+            "module": "crmProcess"
+        },
+        {
+            "file": "src\\common\\crmProcess.js",
+            "line": 109,
+            "itemtype": "method",
+            "name": "setActiveStage",
+            "class": "crmProcess",
+            "module": "crmProcess"
+        },
+        {
+            "file": "src\\crmApp.js",
+            "line": 28,
+            "description": "获取crmAttr对象{{#crossLink \"crmAttr/getOpts\"}}{{/crossLink}}",
+            "itemtype": "method",
+            "name": "attr",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "字段名",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "crmAttr对象",
+                "type": "Object"
+            },
+            "class": "crmContext",
+            "module": "crmContext"
+        },
+        {
+            "file": "src\\crmApp.js",
+            "line": 37,
+            "description": "获取crmEntity对象",
+            "itemtype": "property",
+            "name": "entity",
+            "type": "object",
+            "class": "crmContext",
+            "module": "crmContext"
+        },
+        {
+            "file": "src\\crmApp.js",
+            "line": 45,
+            "description": "获取crmProcess对象",
+            "itemtype": "property",
+            "name": "process",
+            "type": "object",
+            "class": "crmContext",
+            "module": "crmContext"
+        },
+        {
+            "file": "src\\crmApp.js",
+            "line": 53,
+            "description": "获取crmGridList对象",
+            "itemtype": "method",
+            "name": "crmGridList",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "子网格名称",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "crmGridList",
+                "type": "Object"
+            },
+            "class": "crmContext",
+            "module": "crmContext"
+        }
+    ],
+    "warnings": []
+}

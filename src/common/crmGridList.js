@@ -66,6 +66,12 @@ export class crmGridList {
         }
         return this.contname.get_selectedIds()
     }
+   /**
+    * 子网格搜索筛选
+    * @method addFilter
+    * @param  {[type]}  handle     [description]
+    * @param  {[type]}  entityType [description]
+    */
     addFilter(handle, entityType) {
         var TurboGrid = this.contname;
         var CustomerHandler = null;
@@ -84,7 +90,8 @@ export class crmGridList {
     }
     /**
      * 自定义子网格
-     * @property setParameter
+     * @method setParameter
+     * @param  {[type]}     fetchxml [description]
      */
     setParameter(fetchxml) {
         var TurboGrid = this.contname;
