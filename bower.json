@@ -1,7 +1,7 @@
 {
   "name": "crmContext",
   "description": "",
-  "main": "./dist/assets/crmApp.js",
+  "main": "./dist/crmApp.js",
   "moduleType": [],
   "authors": [
     "xfxing"
