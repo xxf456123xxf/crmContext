@@ -57,7 +57,7 @@ export class crmContext {
      * @return {object} crmGridList
      */
     crmGridList(name) {
-        return new crmGridList(this.pars.Sys, name)
+        return new crmGridList(this.pars.Sys, this.Xrm, name)
     }
 }
 export default crmContext;

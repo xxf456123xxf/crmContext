@@ -116,7 +116,7 @@
 	     * @return {object} crmGridList
 	     */
 	    value: function crmGridList(name) {
-	      return new _crmGridList2.crmGridList(this.pars.Sys, name);
+	      return new _crmGridList2.crmGridList(this.pars.Sys, this.Xrm, name);
 	    }
 	  }, {
 	    key: 'entity',
@@ -484,9 +484,9 @@
 	    }, {
 	        key: 'setLookup',
 	        value: function setLookup(entityType, id, name) {
-	            if (this.contname) {
+	            if (this.contname && id) {
 	                var toValue = {};
-	                toValue.id = id;
+	                toValue.id = id.toUpperCase();
 	                toValue.entityType = entityType;
 	                toValue.name = name || '';
 	                this.val([toValue]);
@@ -549,8 +549,8 @@
 	
 	    }, {
 	        key: 'save',
-	        value: function save() {
-	            return this.crmEntity.save();
+	        value: function save(opt) {
+	            return this.crmEntity.save(opt);
 	        }
 	        /**
 	         * @method option
@@ -585,7 +585,7 @@
 	         * @param  {array} columns1 查找字段列
 	         * @param  {function} lookupById 查询方法
 	         * @example
-	         *      attr('new_productid').setByVal(['new_productname',['ownerid$empty']], ['new_name','ownerid'], request.lookupById) //产品查找产品名称赋值、ownerid为null时赋值,会触发change事件
+	         *      attr('new_productid').setByVal(['new_productname',['ownerid$empty']], ['new_name','ownerid'], request.lookupById) //产品查找产品名称赋值、ownerid为null时不赋值,会触发change事件
 	         */
 	
 	    }, {
@@ -702,7 +702,7 @@
 	                        break;
 	                    case 'a:EntityReference':
 	                        var toValue = {};
-	                        toValue.id = attr.guid;
+	                        toValue.id = attr.guid.toUpperCase();
 	                        toValue.entityType = attr.logicalName;
 	                        toValue.name = attr.name;
 	                        this.val([toValue]).change();
@@ -854,6 +854,19 @@
 	            return this.userid == new crmAttr(this.Xrm, 'ownerid').val();
 	        }
 	        /**
+	        * 判断是否是手机端
+	        * @method isMobile
+	        * @return {boolean}
+	        * @example
+	        *       ent.isMobile()
+	        */
+	
+	    }, {
+	        key: 'isMobile',
+	        value: function isMobile() {
+	            return this.Xrm.Page.context.client.getClient() == 'Mobile';
+	        }
+	        /**
 	         * 保存
 	         * @method save
 	         * @return {object} 保存成功后事件
@@ -865,7 +878,11 @@
 	
 	    }, {
 	        key: 'save',
-	        value: function save() {
+	        value: function save(opt) {
+	            if (opt) {
+	                this.Xrm.Page.data.entity.save(opt);
+	                return;
+	            }
 	            return this.Xrm.Page.data.save();
 	        }
 	        /**
@@ -1070,6 +1087,7 @@
 	
 	            var returnArr = [];
 	            controls.forEach(function (control) {
+	                //手机端创建时new_name会报$K的错误
 	                if (typeof control == 'string') {
 	                    new crmAttr(_this8.Xrm, control)[handle](state);
 	                } else {
@@ -1477,12 +1495,20 @@
 	     * @class crmGridList
 	     * @constructor
 	    */
-	    function crmGridList(Sys, name) {
+	    function crmGridList(Sys, Xrm, name) {
 	        _classCallCheck(this, crmGridList);
 	
-	        this.contname = Sys.Application._components[name];
+	        this.Xrm = Xrm;
+	        this.name = name;
+	        var Control = this.Xrm.Page.getControl(name);
+	        var TurboGrid = Control.getGrid();
+	        if (TurboGrid['$3_1']) {
+	            //2016处理方式和d365
+	            this.contname = TurboGrid['$3_1'];
+	        }
+	        //this.contname = Sys.Application._components[name];
 	        if (!this.contname) {
-	            this.logError('not crmGridList name : ' + this.contname);
+	            this.logWarn('not crmGridList name : ' + this.contname);
 	        }
 	    }
 	    /**
@@ -1505,6 +1531,45 @@
 	                return [];
 	            }
 	            return this.contname.get_selectedIds();
+	        }
+	    }, {
+	        key: 'addFilter',
+	        value: function addFilter(handle, entityType) {
+	            var _this = this;
+	
+	            var TurboGrid = this.contname;
+	            var CustomerHandler = null;
+	            if (typeof TurboGrid.addButtonClickHandler === 'function') {
+	                CustomerHandler = TurboGrid.addButtonClickHandler.bind(TurboGrid);
+	                TurboGrid.addButtonClickHandler = function () {
+	                    CustomerHandler();
+	                    var lookup = _this.Xrm.Page.getControl('lookup_' + _this.name);
+	                    lookup.addPreSearch(function () {
+	                        var FilterXml = handle.apply(this);
+	                        lookup.addCustomFilter(FilterXml, entityType);
+	                    });
+	                    TurboGrid.addButtonClickHandler = CustomerHandler;
+	                };
+	            }
+	        }
+	        /**
+	         * 自定义子网格
+	         * @property setParameter
+	         */
+	
+	    }, {
+	        key: 'setParameter',
+	        value: function setParameter(fetchxml) {
+	            var TurboGrid = this.contname;
+	            if (typeof TurboGrid.SetParameter === 'function') {
+	                TurboGrid.SetParameter('fetchxml', fetchxml);
+	            }
+	            TurboGrid.refresh();
+	        }
+	    }, {
+	        key: 'logWarn',
+	        value: function logWarn(message) {
+	            window.console && typeof window.console.warn === 'function' && window.console.warn(message);
 	        }
 	    }, {
 	        key: 'logError',

@@ -266,9 +266,9 @@ export class crmAttr {
      *      attr('ownerid').setLookup('systemuser','guid','管理员') //设置查找字段值
      */
     setLookup(entityType, id, name) {
-        if (this.contname) {
+        if (this.contname && id) {
             let toValue = {};
-            toValue.id = id;
+            toValue.id = id.toUpperCase();
             toValue.entityType = entityType;
             toValue.name = name || '';
             this.val([toValue]);
@@ -317,8 +317,8 @@ export class crmAttr {
      * @method save
      * @return {object} 保存后的事件
      */
-    save() {
-        return this.crmEntity.save();
+    save(opt) {
+        return this.crmEntity.save(opt);
     }
     /**
      * @method option
@@ -350,7 +350,7 @@ export class crmAttr {
      * @param  {array} columns1 查找字段列
      * @param  {function} lookupById 查询方法
      * @example
-     *      attr('new_productid').setByVal(['new_productname',['ownerid$empty']], ['new_name','ownerid'], request.lookupById) //产品查找产品名称赋值、ownerid为null时赋值,会触发change事件
+     *      attr('new_productid').setByVal(['new_productname',['ownerid$empty']], ['new_name','ownerid'], request.lookupById) //产品查找产品名称赋值、ownerid为null时不赋值,会触发change事件
      */
     setByVal(columns, columns1, lookupById) {
         const columnArr = [].concat(columns);
@@ -447,7 +447,7 @@ export class crmAttr {
                 break;
             case 'a:EntityReference':
                 let toValue = {};
-                toValue.id = attr.guid;
+                toValue.id = attr.guid.toUpperCase();
                 toValue.entityType = attr.logicalName;
                 toValue.name = attr.name;
                 this.val([toValue]).change();
@@ -623,6 +623,16 @@ export class crmEntity {
     isowner() {
         return this.userid == new crmAttr(this.Xrm, 'ownerid').val();
     }
+     /**
+    * 判断是否是手机端
+    * @method isMobile
+    * @return {boolean}
+    * @example
+    *       ent.isMobile()
+    */
+    isMobile() {
+        return this.Xrm.Page.context.client.getClient() == 'Mobile';
+    }
     /**
      * 保存
      * @method save
@@ -632,7 +642,11 @@ export class crmEntity {
      *          //保存之后执行
      *      })
      */
-    save() {
+    save(opt) {
+        if(opt) {
+            this.Xrm.Page.data.entity.save(opt);
+            return;
+        }
         return this.Xrm.Page.data.save();
     }
     /**
@@ -791,6 +805,7 @@ export class crmEntity {
     Controls(controls, handle, state) {
         var returnArr = [];
         controls.forEach((control) => {
+            //手机端创建时new_name会报$K的错误
             if (typeof control == 'string') {
                 (new crmAttr(this.Xrm, control))[handle](state);
             } else {
